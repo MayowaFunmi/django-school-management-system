@@ -1,0 +1,26 @@
+label {
+    font-weight: 600;
+}
+
+.btn-send {
+    background-color: #ff3115;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.my_btn {
+    background-color: #ff3115;
+    color: #fff;
+    padding: 10px 15px;
+}
+
+.upload_documents {
+    display: flex;
+    flex-wrap: row wrap;
+}
+
+@media (max-width: 767px) {
+    .contact-comment-section {
+        margin-bottom: 110px;
+    }
+}

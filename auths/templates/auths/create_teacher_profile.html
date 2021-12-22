@@ -1,0 +1,263 @@
+{% extends 'auths/base.html' %} {% load static %} {% block title %}Create User Profile{% endblock title %} {% block content %}
+
+<div class="container contact-comment-section">
+    <h3>
+        <center>Create Teacher's Profile Form</center>
+    </h3>
+    <div id="form-messages">
+        {% if messages %} {% for message in messages %}
+        <h3 style="text-align: center;">{{ message }}</h3>
+        {% endfor %} {% endif %}
+    </div>
+    <form id="contact-form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Select A Title*</label><br>
+                        <select name="title" required>
+							<option value="Mr">Mr</option>
+							<option value="Mrs">Mrs</option>
+							<option value="Dr">Dr</option>
+							<option value="Prof">Prof</option>
+						</select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Middle Name*</label>
+                        <input name="middle_name" id="middle_name" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Gender*</label><br>
+                        <select name="gender" required>
+							<option value="Male">Male</option>
+							<option value="Female">Female</option>
+						</select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Date Of Birth*</label>
+                        <input type="date" name="date_of_birth" id="date_of_birth" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12" id="div_age">
+                    <div class="form-group">
+                        <label>Age*</label>
+                        <input name="age" id="age" class="form-control" type="text" readonly>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Address*</label>
+                        <input name="address" id="address" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Religion*</label><br>
+                        <select name="religion" required>
+							<option value="Christianity">Christianity</option>
+							<option value="Islam">Islam</option>
+						</select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Phone Number*</label>
+                        <input name="phone_number" id="phone_number" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Add Your Photo*</label><br>
+                        <input type="file" name="picture" id="picture" required>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>About You*</label>
+                        <textarea cols="40" rows="10" id="about_me" name="about_me" class="textarea form-control" placeholder="Write something about yourself, not more than 300 words..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Your Designation*</label><br>
+                        <select name="designation" required>
+							<option value="Principal">Principal</option>
+							<option value="Vice Principal">Vice Principal</option>
+							<option value="Head of Department">Head of Department</option>
+							<option value="Subject Teacher">Subject Teacher</option>
+						</select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Grade Level*</label>
+                        <input type="text" name="grade_level" id="grade_level" placeholder="E.g, Level 8 Step 2" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Date Of First Appointment*</label>
+                        <input type="date" name="first_appointment" id="first_appointment" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12" id="service_year">
+                    <div class="form-group">
+                        <label>No Of Years In Service*</label>
+                        <input type="text" name="years_in_service" id="years_in_service" class="form-control" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Highest Qualification*</label><br>
+                        <select name="qualification" required>
+							<option value="NCE">NCE</option>
+                            <option value="HND">HND</option>
+							<option value="B.Sc">B.Sc</option>
+							<option value="PGDE">PGDE</option>
+							<option value="B.Arts">B.Arts</option>
+							<option value="M.Sc">M.Sc</option>
+							<option value="PhD">PhD</option>
+						</select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Discipline/Field Of Specialization*</label>
+                        <input type="text" name="discipline" id="discipline" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Current Zone*</label><br>
+                        <select name="current_posting_zone" id="current_posting_zone" required>
+                            <option>---------------------------------</option>
+                            {% for zone in all_zones %}
+							    <option value="{{ zone.name }}">{{ zone.name }}</option>
+                            {% endfor %}
+						</select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Current School*</label><br>
+                        <select name="current_posting_school" class="current_posting_school" required>
+                        
+						</select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Published Work (If Any)*</label>
+                        <input type="url" name="published_work" id="published_work" class="form-control" placeholder="E.g 'http://www.google.com' or https://" required>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Current Subject*</label>
+                        <input type="text" name="current_subject" id="current_subject" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Previous School Posted 1*</label><br>
+                        <select name="previous_posting_1">
+                            <option value="Not Available">Ignore If None</option>
+                            {% for school in all_schools %}
+							    <option value="{{ school.name }}">{{ school.name }} | {{ school.zone }}</option>
+                            {% endfor %}
+						</select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Previous School Posted 2*</label><br>
+                        <select name="previous_posting_2">
+                            <option value="Not Available">Ignore If None</option>
+                            {% for school in all_schools %}
+							    <option value="{{ school.name }}">{{ school.name }} | {{ school.zone }}</option>
+                            {% endfor %}
+						</select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Previous School Posted 3*</label><br>
+                        <select name="previous_posting_3">
+                            <option value="Not Available">Ignore If None</option>
+                            {% for school in all_schools %}
+							    <option value="{{ school.name }}">{{ school.name }} | {{ school.zone }}</option>
+                            {% endfor %}
+						</select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Previous Subjects Taught*</label><br>
+                        <input type="text" name="previous_subjects" id="previous_subjects" class="form-control" placeholder="List subject(s) you have taught apart from current subject">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <div>
+                        <label>Upload Document Files*</label><br>
+                        <div id="images">
+
+                        </div>
+                        <div class="form-group mb-0">
+                            <input id="add_image" class="btn-send" type="submit" value="Add Documents">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group mb-0">
+                <input class="btn-send" type="submit" value="Submit Profile">
+            </div>
+
+        </fieldset>
+    </form>
+</div>
+
+{% endblock content %}

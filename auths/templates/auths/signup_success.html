@@ -1,0 +1,35 @@
+{% extends 'auths/base.html' %} {% load static %} {% block title %}Sign Up Successful{% endblock title %} {% block content %}
+
+<div class="container contact-comment-section">
+
+    <div id="form-messages">
+        {% if messages %} {% for message in messages %}
+        <h3 style="text-align: center;">{{ message }}</h3>
+        {% endfor %} {% endif %}
+    </div>
+    <h3>
+      Thank You, {{ first_name }} {{ last_name }}.<br>
+      You Have Successfully Registered. Below Are Your Registration Details:
+    </h3>
+    <div class="d-flex justify-content-center">
+        <div class="col-md-6 col-sm-12">
+            <div>
+                Username: {{ username }}<br>
+                Email: {{ email }}<br>
+                First Name: {{ first_name }}<br>
+                Surname: {{ last_name }}<br>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-sm-12">
+          User Status: {{ status }}<br>
+          File Number: {{ file_no }}<br>
+          Unique ID: {{ unique_id }}
+        </div>
+    </div>
+    <button class="btn btn-primary my_btn">
+      <a href="{% url 'auths:login' %}" class="sl-readmore-btn mr-30" data-animation-in="lightSpeedIn" data-animation-out="animate-out">Login</a>
+    </button>
+
+</div>
+{% endblock content %}
