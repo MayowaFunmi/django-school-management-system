@@ -33,15 +33,15 @@ class CustomUser(AbstractUser):
 
 
 def teachers_directory(instance, filename):
-    return f'Teachers_Files/{instance.admin.first_name}_{instance.admin.last_name}/filename/%Y/%m/%d/'
+    return f'Teachers_Files/{instance.user.first_name}_{instance.user.last_name}/'
 
 
 def non_teachers_directory(instance, filename):
-    return f'Non_Teachers_Files/{instance.admin.first_name}_{instance.admin.last_name}/filename/%Y/%m/%d/'
+    return f'Non_Teachers_Files/{instance.user.first_name}_{instance.user.last_name}/'
 
 
 def students_directory(instance, filename):
-    return f'Students_Files/{instance.admin.first_name}_{instance.admin.last_name}/filename%Y/%m/%d/'
+    return f'Students_Files/{instance.user.first_name}_{instance.user.last_name}/'
 
 
 class Zone(models.Model):
@@ -194,7 +194,8 @@ class TeachingSTaff(models.Model):
 
 class TeachingSTaffFiles(models.Model):
     user = models.ForeignKey(TeachingSTaff, on_delete=models.CASCADE)
-    documents = models.FileField(upload_to=teachers_directory)
+    #document_title = models.CharField(max_length=100)
+    documents = models.FileField(upload_to='Teachers_Files/%Y/%m/%d/')
 
     def __str__(self):
         return f'Files for {self.user.title} {self.user.user.last_name}'
@@ -272,7 +273,7 @@ class NonTeachingStaff(models.Model):
 
 class NonTeachingSTaffFiles(models.Model):
     user = models.ForeignKey(NonTeachingStaff, on_delete=models.CASCADE)
-    documents = models.FileField(upload_to=non_teachers_directory)
+    documents = models.FileField(upload_to='Non_Teachers_Files/%Y/%m/%d/')
 
     def __str__(self):
         return f'Files for {self.user.title} {self.user.user.last_name}'
@@ -323,7 +324,7 @@ class Student(models.Model):
 
 class StudentFiles(models.Model):
     user = models.ForeignKey(Student, on_delete=models.CASCADE)
-    documents = models.FileField(upload_to=students_directory)
+    documents = models.FileField(upload_to='Student_files/%Y/%m/%d/')
 
     def __str__(self):
         return f'Files for {self.user.title} {self.user.user.last_name}'

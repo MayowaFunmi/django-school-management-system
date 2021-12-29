@@ -9,8 +9,10 @@ label {
 }
 
 .my_btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     background-color: #ff3115;
-    color: #fff;
     padding: 10px 15px;
 }
 

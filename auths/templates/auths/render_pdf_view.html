@@ -1,6 +1,11 @@
-{% extends 'auths/base.html' %} {% load static %} {% block title %}Profile Details{% endblock title %} {% block content %}
-
-<div class="container contact-comment-section">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher's Detail</title>
+</head>
+<body>
+    <div class="container contact-comment-section">
 
     <div id="form-messages">
         {% if messages %} {% for message in messages %}
@@ -13,12 +18,10 @@
     <div class="d-flex justify-content-center">
         <div class="col-md-4 col-sm-12">
             <div>
-                Status : {{ status }}<br>
                 Username: {{ username }}<br>
                 Title: {{ title }}<br>
                 First Name: {{ first_name }}<br>
                 Surname: {{ last_name }}<br>
-                Email: {{ email }}<br>
                 Middle Name: {{ middle_name }}<br>
                 Gender: {{ gender }}<br>
                 Date Of Birth: {{ date_of_birth }}<br>
@@ -32,7 +35,6 @@
         </div>
 
         <div class="col-md-4 col-sm-12">
-            File Number : {{ file_no }}<br>
             Designation: {{ designation }}<br>
             Grade Level: {{ grade_level }}<br>
             Date Of First Appointment: {{ first_appointment }}<br>
@@ -51,13 +53,14 @@
         </div>
         
         <div class="col-md-4 col-sm-12">
-            <img src="{{ picture.url }}">
+            <img src="{{ picture.path }}">
         </div>
     </div>
     <button class="btn btn-primary my_btn">
-        <a style="color: white;" href="{% url 'auths:update_teacher_profile' %}" class="sl-readmore-btn mr-30" data-animation-in="lightSpeedIn" data-animation-out="animate-out">Edit Profile</a>
+        <a style="color: white;" href="#" class="sl-readmore-btn mr-30" data-animation-in="lightSpeedIn" data-animation-out="animate-out">Edit Profile</a>
         <a style="color: white;" href="{% url 'auths:render_pdf_view' %}" class="sl-readmore-btn mr-30" data-animation-in="lightSpeedIn" data-animation-out="animate-out" target="_blank">Print</a>
     </button>
 
 </div>
-{% endblock content %}
+</body>
+</html>

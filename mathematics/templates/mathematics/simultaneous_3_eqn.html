@@ -1,0 +1,112 @@
+{% extends 'auths/base.html' %}
+{% load static %}
+
+{% block title %}Simultaneous Equation | Three Unknown{% endblock title %}
+
+{% block content %}
+<div class="container contact-comment-section">
+    <h3><center>Solution To Simultaneous Equation With Three Unknown</center></h3>
+    <h3>General form of simultaneous equation:</h3>
+    <p>a1 x + b1 y + c1 z = d1 ----------- (i)</p>
+    <p>a2 x + b2 y + c2 z = d2 ----------- (ii)</p>
+    <p>a3 x + b3 y + c3 z = d3 ----------- (iii)</p>
+
+    <div id="form-messages">
+      {% if messages %}
+        {% for message in messages %}
+          <h3 style="text-align: center;">{{ message }}</h3>
+        {% endfor %}
+      {% endif %}
+    </div>
+    <form id="simultaneous_three">
+      {% csrf_token %}
+        <fieldset>
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <h3>Provide Your Data Here:</h3>
+                    <p>Equation 1:</p>
+                    <div class="form-group">
+                        <label>Enter the coefficient of x (i.e 'a1')*</label>
+                        <input name="a1" id="a1" class="form-control" type="number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter the coefficient of y (i.e 'b1')*</label>
+                        <input name="b1" id="b1" class="form-control" type="number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter the coefficient of z (i.e 'c1')*</label>
+                        <input name="c1" id="c1" class="form-control" type="number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter the constant (i.e 'd1')*</label>
+                        <input name="d1" id="d1" class="form-control" type="number" required>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 col-sm-12">
+                    <h3>Provide Your Data Here:</h3>
+                    <p>Equation 2:</p>
+                    <div class="form-group">
+                        <label>Enter the coefficient of x (i.e 'a2')*</label>
+                        <input name="a2" id="a2" class="form-control" type="number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter the coefficient of y (i.e 'b2')*</label>
+                        <input name="b2" id="b2" class="form-control" type="number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter the coefficient of z (i.e 'c2')*</label>
+                        <input name="c2" id="c2" class="form-control" type="number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter the constant (i.e 'd2')*</label>
+                        <input name="d2" id="d2" class="form-control" type="number" required>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 col-sm-12">
+                    <h3>Provide Your Data Here:</h3>
+                    <p>Equation 3:</p>
+                    <div class="form-group">
+                        <label>Enter the coefficient of x (i.e 'a3')*</label>
+                        <input name="a3" id="a3" class="form-control" type="number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter the coefficient of y (i.e 'b3')*</label>
+                        <input name="b3" id="b3" class="form-control" type="number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter the coefficient of z (i.e 'c3')*</label>
+                        <input name="c3" id="c3" class="form-control" type="number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter the constant (i.e 'd3')*</label>
+                        <input name="d3" id="d3" class="form-control" type="number" required>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 col-sm-12">
+                    <h3>Solution Center:</h3>
+                    <div class="form-group show_answer" style="display: none">
+                    
+                    </div>
+                </div>
+            </div>
+          
+            <div class="form-group mb-0">
+                <input class="btn-send" type="submit" value="Solve Equation">
+            </div>
+
+        </fieldset>
+    </form>
+</div>
+{% endblock content %}

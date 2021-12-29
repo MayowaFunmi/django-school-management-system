@@ -1,8 +1,8 @@
-{% extends 'auths/base.html' %} {% load static %} {% block title %}Create Teacher Profile{% endblock title %} {% block content %}
+{% extends 'auths/base.html' %} {% load static %} {% block title %}Update Non Teacher's Profile{% endblock title %} {% block content %}
 
 <div class="container contact-comment-section">
     <h3>
-        <center>Create Teacher's Profile Form</center>
+        <center>Profile Update Form for {{ request.user.username }}</center>
     </h3>
     <div id="form-messages">
         {% if messages %} {% for message in messages %}
@@ -17,17 +17,17 @@
                     <div class="form-group">
                         <label>Select A Title*</label><br>
                         <select name="title" required>
+                            <option value="{{ teacher.title }}" selected>{{ teacher.title }}</option>
 							<option value="Mr">Mr</option>
-							<option value="Mrs">Mrs</option>
-							<option value="Dr">Dr</option>
-							<option value="Prof">Prof</option>
+							<option value="Miss">Miss</option>
+                            <option value="Mrs">Mrs</option>
 						</select>
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
                         <label>Middle Name*</label>
-                        <input name="middle_name" id="middle_name" class="form-control" type="text" required>
+                        <input name="middle_name" id="middle_name" class="form-control" type="text" value="{{ teacher.middle_name }}" required>
                     </div>
                 </div>
             </div>
@@ -37,6 +37,7 @@
                     <div class="form-group">
                         <label>Gender*</label><br>
                         <select name="gender" required>
+                            <option value="{{ teacher.gender }}" selected>{{ teacher.gender }}</option>
 							<option value="Male">Male</option>
 							<option value="Female">Female</option>
 						</select>
@@ -44,23 +45,25 @@
                 </div>
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
-                        <label>Date Of Birth*</label>
-                        <input type="date" name="date_of_birth" id="date_of_birth" class="form-control" required>
+                        <label>Current Date Of Birth:</label>
+                        <input type="text" class="form-control" name="current_date_of_birth" value="{{ teacher.date_of_birth|date:'d/m/Y' }}" readonly><br>
+                        <label>Change Date Of Birth If Necessary*</label><br>
+                        <input type="date" name="date_of_birth" id="update_date_of_birth" class="form-control">
                     </div>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-6 col-sm-12" id="div_age">
+                <div class="col-md-6 col-sm-12" id="update_div_age">
                     <div class="form-group">
                         <label>Age*</label>
-                        <input name="age" id="age" class="form-control" type="text" readonly>
+                        <input name="age" id="update_age" class="form-control" type="text" value="{{ teacher.age }}" readonly>
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
                         <label>Address*</label>
-                        <input name="address" id="address" class="form-control" type="text" required>
+                        <input name="address" id="address" class="form-control" type="text" value="{{ teacher.address }}" required>
                     </div>
                 </div>
             </div>
@@ -70,6 +73,7 @@
                     <div class="form-group">
                         <label>Religion*</label><br>
                         <select name="religion" required>
+                            <option value="{{ teacher.religion }}" selected>{{ teacher.religion }}</option>
 							<option value="Christianity">Christianity</option>
 							<option value="Islam">Islam</option>
 						</select>
@@ -78,7 +82,7 @@
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
                         <label>Phone Number*</label>
-                        <input name="phone_number" id="phone_number" class="form-control" type="text" required>
+                        <input name="phone_number" id="phone_number" class="form-control" type="text" value="{{ teacher.phone_number }}" required>
                     </div>
                 </div>
             </div>
@@ -86,14 +90,18 @@
             <div class="row">
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
-                        <label>Add Your Photo*</label><br>
-                        <input type="file" name="picture" id="picture" required>
+                        <label>Current Photo:</label>
+                        <img src="{{ teacher.picture.url }}" style="width: 150px; height=150px;"><br>
+                        <label>Change Photo Below If Necessary*</label><br>
+                        <input type="file" name="picture" id="picture">
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
                         <label>About You*</label>
-                        <textarea cols="40" rows="10" id="about_me" name="about_me" class="textarea form-control" placeholder="Write something about yourself, not more than 300 words..."></textarea>
+                        <textarea cols="40" rows="10" id="about_me" name="about_me" class="textarea form-control" placeholder="Write something about yourself, not more than 300 words...">
+                            {{ teacher.about_me }}
+                        </textarea>
                     </div>
                 </div>
             </div>
@@ -103,17 +111,18 @@
                     <div class="form-group">
                         <label>Your Designation*</label><br>
                         <select name="designation" required>
-							<option value="Principal">Principal</option>
-							<option value="Vice Principal">Vice Principal</option>
-							<option value="Head of Department">Head of Department</option>
-							<option value="Subject Teacher">Subject Teacher</option>
+                            <option value="{{ teacher.designation }}" selected>{{ teacher.designation }}</option>
+							<option value="Office Assistant">Office Assistant</option>
+							<option value="Secretary">Secretary</option>
+							<option value="Librarian">Librarian</option>
+							<option value="Others">Others</option>
 						</select>
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
                         <label>Grade Level*</label>
-                        <input type="text" name="grade_level" id="grade_level" placeholder="E.g, Level 8 Step 2" required>
+                        <input type="text" name="grade_level" id="grade_level" placeholder="E.g, Level 8 Step 2" value="{{ teacher.grade_level }}" required>
                     </div>
                 </div>
             </div>
@@ -121,14 +130,16 @@
             <div class="row">
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
-                        <label>Date Of First Appointment*</label>
-                        <input type="date" name="first_appointment" id="first_appointment" class="form-control" required>
+                        <label>Current Date Of First Appointment:</label>
+                        <input type="text" class="form-control" name="current_first_appointment" value="{{ teacher.first_appointment|date:'d/m/Y' }}" readonly><br>
+                        <label>Change Date If Necessary*</label><br>
+                        <input type="date" name="first_appointment" id="update_first_appointment" class="form-control">
                     </div>
                 </div>
-                <div class="col-md-6 col-sm-12" id="service_year">
+                <div class="col-md-6 col-sm-12" id="update_service_year">
                     <div class="form-group">
                         <label>No Of Years In Service*</label>
-                        <input type="text" name="years_in_service" id="years_in_service" class="form-control" readonly>
+                        <input type="text" name="years_in_service" id="update_years_in_service" class="form-control" value="{{ teacher.years_in_service }}" readonly>
                     </div>
                 </div>
             </div>
@@ -138,20 +149,20 @@
                     <div class="form-group">
                         <label>Highest Qualification*</label><br>
                         <select name="qualification" required>
-							<option value="NCE">NCE</option>
-                            <option value="HND">HND</option>
-							<option value="B.Sc">B.Sc</option>
+                            <option value="{{ teacher.qualification }}" selected>{{ teacher.qualification }}</option>
+							<option value="SSCE">SSCE</option>
+                            <option value="OND">OND</option>
+							<option value="HND">HND</option>
 							<option value="PGDE">PGDE</option>
+							<option value="B.Sc">B.Sc</option>
 							<option value="B.Arts">B.Arts</option>
-							<option value="M.Sc">M.Sc</option>
-							<option value="PhD">PhD</option>
 						</select>
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
                         <label>Discipline/Field Of Specialization*</label>
-                        <input type="text" name="discipline" id="discipline" required>
+                        <input type="text" name="discipline" id="discipline" value="{{ teacher.discipline }}" required>
                     </div>
                 </div>
             </div>
@@ -160,8 +171,10 @@
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
                         <label>Current Zone*</label><br>
-                        <select name="current_posting_zone" id="current_posting_zone" required>
-                            <option disabled>---------------------------------</option>
+                        <input type="text" value="{{ teacher.current_posting_zone }}" name="reg_current_posting_zone" readonly>
+                        <label>Choose Another Zone:</label><button id="show_zone">Here</button>
+                        <select style="display: none;" name="current_posting_zone" id="current_posting_zone">
+                            <option value="None">Select Zone</option>
                             {% for zone in all_zones %}
 							    <option value="{{ zone.id }}">{{ zone.name }}</option>
                             {% endfor %}
@@ -171,24 +184,11 @@
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
                         <label>Current School*</label><br>
-                        <select name="current_posting_school" class="current_posting_school" required>
-                        
-						</select>
-                    </div>
-                </div>
-            </div>
+                        <input type="text" value="{{ teacher.current_posting_school }}" name="reg_current_posting_school" readonly>
+                        <select style="display: none;" name="current_posting_school" class="current_posting_school">
+                            <option value="None">Select School</option>
 
-            <div class="row">
-                <div class="col-md-6 col-sm-12">
-                    <div class="form-group">
-                        <label>Published Work (If Any)*</label>
-                        <input type="url" name="published_work" id="published_work" class="form-control" placeholder="E.g 'http://www.google.com' or https://" required>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="form-group">
-                        <label>Current Subject*</label>
-                        <input type="text" name="current_subject" id="current_subject" class="form-control" required>
+						</select>
                     </div>
                 </div>
             </div>
@@ -198,7 +198,6 @@
                     <div class="form-group">
                         <label>Previous School Posted 1*</label><br>
                         <select name="previous_posting_1">
-                            <option value="Not Available">Ignore If None</option>
                             {% for school in all_schools %}
 							    <option value="{{ school.id }}">{{ school.name }} | {{ school.zone }}</option>
                             {% endfor %}
@@ -209,7 +208,6 @@
                     <div class="form-group">
                         <label>Previous School Posted 2*</label><br>
                         <select name="previous_posting_2">
-                            <option value="Not Available">Ignore If None</option>
                             {% for school in all_schools %}
 							    <option value="{{ school.id }}">{{ school.name }} | {{ school.zone }}</option>
                             {% endfor %}
@@ -223,37 +221,16 @@
                     <div class="form-group">
                         <label>Previous School Posted 3*</label><br>
                         <select name="previous_posting_3">
-                            <option value="Not Available">Ignore If None</option>
                             {% for school in all_schools %}
 							    <option value="{{ school.id }}">{{ school.name }} | {{ school.zone }}</option>
                             {% endfor %}
 						</select>
                     </div>
                 </div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="form-group">
-                        <label>Previous Subjects Taught*</label><br>
-                        <input type="text" name="previous_subjects" id="previous_subjects" class="form-control" placeholder="List subject(s) you have taught apart from current subject">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div>
-                    <div>
-                        <label>Upload Document Files*</label><br>
-                        <div id="images">
-
-                        </div>
-                        <div class="form-group mb-0">
-                            <input id="add_image" class="btn-send" type="submit" value="Add Documents">
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div class="form-group mb-0">
-                <input class="btn-send" type="submit" value="Submit Profile">
+                <input class="btn-send" type="submit" value="Update Profile">
             </div>
 
         </fieldset>

@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', auths_view.home, name='home'),
     path('auths/', include('auths.urls', namespace='auths')),
+    path('mathematics/', include('mathematics.urls', namespace='mathematics')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -2,8 +2,10 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 from .models import Zone, School, TeachingSTaff, TeachingSTaffFiles
 
 # Create your views here.
@@ -47,6 +49,10 @@ def user_signup(request):
             messages.error(request, 'Your Email, ' + email + ', Already Exists. Please Try Another Email')
             return render(request, 'auths/user_signup.html')
 
+        if User.objects.filter(file_no=file_no).exists():
+            messages.error(request, 'Your File Number, ' + file_no + ', Already Exists. Please Enter Correct File Number')
+            return render(request, 'auths/user_signup.html')
+
         # validate password
         if password != password2:
             messages.error(request, "Your Passwords Don't match")
@@ -80,7 +86,7 @@ def user_login(request):
                     print(request.user.status)
                     if request.user.is_superuser:
                         return redirect('/auths/display_teacher_profile/')
-                    if request.user.status == 'administrator':
+                    elif request.user.status == 'administrator':
                         return redirect('/auths/display_teacher_profile/')
                     elif request.user.status == 'staff - teaching':
                         return redirect('/auths/display_teacher_profile/')
@@ -98,6 +104,7 @@ def user_logout(request):
     return HttpResponseRedirect('/')
 
 
+@login_required
 def create_teacher_profile(request):
     all_zones = Zone.objects.all()
     all_schools = School.objects.order_by('zone')
@@ -124,29 +131,50 @@ def create_teacher_profile(request):
         years_in_service = request.POST['years_in_service']
         qualification = request.POST['qualification']
         discipline = request.POST['discipline']
-        current_posting_zone = request.POST['current_posting_zone']
-        current_posting_school = request.POST['current_posting_school']
+        current_posting_zone_id = request.POST['current_posting_zone']
+        current_posting_school_id = request.POST['current_posting_school']
         published_work = request.POST['published_work']
         current_subject = request.POST['current_subject']
-        previous_posting_1 = request.POST['previous_posting_1']
-        previous_posting_2 = request.POST['previous_posting_2']
-        previous_posting_3 = request.POST['previous_posting_3']
+        previous_posting_1_id = request.POST['previous_posting_1']
+        previous_posting_2_id = request.POST['previous_posting_2']
+        previous_posting_3_id = request.POST['previous_posting_3']
         previous_subjects = request.POST['previous_subjects']
 
-        print(current_posting_zone)
+        current_posting_zone = Zone.objects.get(id=current_posting_zone_id)
+        current_posting_school = School.objects.get(id=current_posting_school_id)
+        previous_posting_1 = School.objects.get(id=previous_posting_1_id)
+        previous_posting_2 = School.objects.get(id=previous_posting_2_id)
+        previous_posting_3 = School.objects.get(id=previous_posting_3_id)
+
+        teacher = TeachingSTaff.objects.get(user=request.user)
+        teacher.title = title
+        teacher.middle_name = middle_name
+        teacher.picture = picture
+        teacher.gender = gender
+        teacher.date_of_birth = date_of_birth
+        teacher.age = age
+        teacher.address = address
+        teacher.religion = religion
+        teacher.phone_number = phone_number
+        teacher.about_me = about_me
+        teacher.designation = designation
+        teacher.grade_level = grade_level
+        teacher.first_appointment = first_appointment
+        teacher.years_in_service = years_in_service
+        teacher.qualification = qualification
+        teacher.discipline = discipline
+        teacher.published_work = published_work
+        teacher.current_posting_zone = current_posting_zone
+        teacher.current_posting_school = current_posting_school
+        teacher.previous_posting_1 = previous_posting_1
+        teacher.previous_posting_2 = previous_posting_2
+        teacher.previous_posting_3 = previous_posting_3
+        teacher.current_subject = current_subject
+        teacher.previous_subjects = previous_subjects
+        teacher.save()
 
         images = request.FILES.getlist('documents')
-
-        teacher = TeachingSTaff(
-            title=title, middle_name=middle_name, picture=picture, gender=gender, date_of_birth=date_of_birth, age=age,
-            address=address, religion=religion, phone_number=phone_number, about_me=about_me, designation=designation,
-            grade_level=grade_level, first_appointment=first_appointment, years_in_service=years_in_service,
-            qualification=qualification, discipline=discipline, published_work=published_work,
-            current_posting_zone=current_posting_zone, current_posting_school=current_posting_school,
-            previous_posting_1=previous_posting_1, previous_posting_2=previous_posting_2, previous_posting_3=previous_posting_3,
-            current_subject=current_subject, previous_subjects=previous_subjects
-        )
-        teacher.save()
+        #document_title = request.POST.getlist('document_title')
 
         for image in images:
             fs = FileSystemStorage()
@@ -164,31 +192,197 @@ def create_teacher_profile(request):
 def display_teacher_profile(request):
     teacher = TeachingSTaff.objects.get(user=request.user)
     teacher_file = TeachingSTaffFiles.objects.filter(user=teacher)
+    # count_files = len(teacher_file)
 
     if teacher.middle_name is None:
         messages.info(request, 'You have no profile yet. Please create your profile.')
         return HttpResponseRedirect('/auths/create_teacher_profile/')
     else:
         context = {
-
+            'username': request.user.username, 'first_name': request.user.first_name, 'last_name': request.user.last_name,
+            'email': request.user.email, 'status': request.user.status, 'file_no': request.user.file_no,
+            'unique_id': request.user.unique_id, 'middle_name': teacher.middle_name, 'title': teacher.title,
+            'picture': teacher.picture, 'gender': teacher.gender, 'date_of_birth': teacher.date_of_birth,
+            'age': teacher.age, 'address': teacher.address, 'religion': teacher.religion, 'phone_number': teacher.phone_number,
+            'about_me': teacher.about_me, 'created_date': teacher.created_date, 'designation': teacher.designation,
+            'grade_level': teacher.grade_level, 'first_appointment': teacher.first_appointment,
+            'years_in_service': teacher.years_in_service, 'qualification': teacher.qualification, 'discipline': teacher.discipline,
+            'published_work': teacher.published_work, 'current_posting_zone': teacher.current_posting_zone,
+            'current_posting_school': teacher.current_posting_school, 'previous_posting_1': teacher.previous_posting_1,
+            'previous_posting_2': teacher.previous_posting_2, 'previous_posting_3': teacher.previous_posting_3,
+            'current_subject': teacher.current_subject, 'previous_subjects': teacher.previous_subjects,
         }
         return render(request, 'auths/display_teacher_profile.html', context)
 
 
-def create_non_teacher_profile(request):
-    pass
-
-
-def display_non_teacher_profile(request):
-    pass
-
-
+@login_required
 def create_student_profile(request):
     pass
 
 
+@login_required
 def display_student_profile(request):
     pass
+
+
+# pdf views
+@login_required
+def render_pdf_view(request):
+    teacher = TeachingSTaff.objects.get(user=request.user)
+    template_path = 'auths/render_pdf_view.html'
+    context = {
+        'username': request.user.username, 'first_name': request.user.first_name, 'last_name': request.user.last_name,
+        'email': request.user.email, 'status': request.user.status, 'file_no': request.user.file_no,
+        'unique_id': request.user.unique_id, 'middle_name': teacher.middle_name, 'title': teacher.title,
+        'picture': teacher.picture, 'gender': teacher.gender, 'date_of_birth': teacher.date_of_birth,
+        'age': teacher.age, 'address': teacher.address, 'religion': teacher.religion,
+        'phone_number': teacher.phone_number,
+        'about_me': teacher.about_me, 'created_date': teacher.created_date, 'designation': teacher.designation,
+        'grade_level': teacher.grade_level, 'first_appointment': teacher.first_appointment,
+        'years_in_service': teacher.years_in_service, 'qualification': teacher.qualification,
+        'discipline': teacher.discipline,
+        'published_work': teacher.published_work, 'current_posting_zone': teacher.current_posting_zone,
+        'current_posting_school': teacher.current_posting_school, 'previous_posting_1': teacher.previous_posting_1,
+        'previous_posting_2': teacher.previous_posting_2, 'previous_posting_3': teacher.previous_posting_3,
+        'current_subject': teacher.current_subject, 'previous_subjects': teacher.previous_subjects,
+    }
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'filename="report.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+       html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+@login_required
+def update_teacher_profile(request):
+    teacher = TeachingSTaff.objects.get(user=request.user)
+    all_zones = Zone.objects.all()
+    all_schools = School.objects.order_by('zone')
+    context = {
+        'teacher': teacher,
+        'all_zones': all_zones,
+        'all_schools': all_schools
+    }
+
+    if request.method == 'POST':
+        title = request.POST['title']
+        middle_name = request.POST['middle_name']
+        gender = request.POST['gender']
+        # reg_date = request.POST['current_date_of_birth']
+        # updated_date = None
+        age = request.POST['age']
+        address = request.POST['address']
+        religion = request.POST['religion']
+        phone_number = request.POST['phone_number']
+        about_me = request.POST['about_me']
+        designation = request.POST['designation']
+        grade_level = request.POST['grade_level']
+
+        # reg_current_first_appointment = request.POST['current_first_appointment']
+        # update_first_appointment = None
+
+        years_in_service = request.POST['years_in_service']
+        qualification = request.POST['qualification']
+        discipline = request.POST['discipline']
+
+        # current_posting_zone_id = request.POST['current_posting_zone']
+        # current_posting_school_id = request.POST['current_posting_school']
+        
+        published_work = request.POST['published_work']
+        current_subject = request.POST['current_subject']
+        previous_posting_1_id = request.POST['previous_posting_1']
+        previous_posting_2_id = request.POST['previous_posting_2']
+        previous_posting_3_id = request.POST['previous_posting_3']
+        previous_subjects = request.POST['previous_subjects']
+
+        previous_posting_1 = School.objects.get(id=previous_posting_1_id)
+        previous_posting_2 = School.objects.get(id=previous_posting_2_id)
+        previous_posting_3 = School.objects.get(id=previous_posting_3_id)
+
+        y = teacher.picture
+        picture = None
+        try:
+            if request.FILES['picture']:
+                picture = request.FILES['picture']
+        except:
+            picture = None
+
+        # change date format to yyyy-mm-dd for date of birth
+        x = teacher.date_of_birth
+        reg = x.strftime('%Y-%m-%d')
+
+        # change date format to yyyy-mm-dd for date of appointment
+        d = teacher.first_appointment
+        d_reg = d.strftime('%Y-%m-%d')
+
+        teacher.title = title
+        teacher.middle_name = middle_name
+        teacher.gender = gender
+
+        try:
+            if request.POST['update_date_of_birth']:
+                updated_date = request.POST['update_date_of_birth']
+                teacher.date_of_birth = updated_date
+        except:
+            teacher.date_of_birth = reg
+
+        if picture is None:
+            teacher.picture = y
+        else:
+            teacher.picture = picture
+            
+        teacher.age = age
+        teacher.address = address
+        teacher.religion = religion
+        teacher.phone_number = phone_number
+        teacher.about_me = about_me
+        teacher.designation = designation
+        teacher.grade_level = grade_level
+
+        try:
+            if request.POST['update_first_appointment']:
+                update_first_appointment = request.POST['update_first_appointment']
+                teacher.first_appointment = update_first_appointment
+        except:
+            teacher.first_appointment = d_reg
+
+        teacher.years_in_service = years_in_service
+        teacher.qualification = qualification
+        teacher.discipline = discipline
+        teacher.published_work = published_work
+
+        try:
+            if request.POST['current_posting_zone'] and request.POST['current_posting_school']:
+                if request.POST['current_posting_zone'] == None and request.POST['current_posting_school'] == None:
+                    teacher.current_posting_zone = teacher.current_posting_zone
+                    teacher.current_posting_school = teacher.current_posting_school
+                else:
+                    current_posting_zone = Zone.objects.get(id=request.POST['current_posting_zone'])
+                    current_posting_school = School.objects.get(id=request.POST['current_posting_school'])
+                    teacher.current_posting_zone = current_posting_zone
+                    teacher.current_posting_school = current_posting_school
+        except:
+            teacher.current_posting_zone = teacher.current_posting_zone
+            teacher.current_posting_school = teacher.current_posting_school
+        teacher.previous_posting_1 = previous_posting_1
+        teacher.previous_posting_2 = previous_posting_2
+        teacher.previous_posting_3 = previous_posting_3
+        teacher.current_subject = current_subject
+        teacher.previous_subjects = previous_subjects
+        teacher.save()
+        return redirect('/auths/display_teacher_profile/')
+    return render(request, 'auths/update_teacher_profile.html', context)
+
+
 '''
 # user Profile
 def user_profile(request, id):

@@ -1,8 +1,8 @@
-{% extends 'auths/base.html' %} {% load static %} {% block title %}Create Teacher Profile{% endblock title %} {% block content %}
+{% extends 'auths/base.html' %} {% load static %} {% block title %}Create Non Teaching Staff Profile{% endblock title %} {% block content %}
 
 <div class="container contact-comment-section">
     <h3>
-        <center>Create Teacher's Profile Form</center>
+        <center>Create Non Teaching Staff Profile Form</center>
     </h3>
     <div id="form-messages">
         {% if messages %} {% for message in messages %}
@@ -18,9 +18,8 @@
                         <label>Select A Title*</label><br>
                         <select name="title" required>
 							<option value="Mr">Mr</option>
-							<option value="Mrs">Mrs</option>
-							<option value="Dr">Dr</option>
-							<option value="Prof">Prof</option>
+							<option value="Miss">Miss</option>
+                            <option value="Mrs">Mrs</option>
 						</select>
                     </div>
                 </div>
@@ -103,10 +102,10 @@
                     <div class="form-group">
                         <label>Your Designation*</label><br>
                         <select name="designation" required>
-							<option value="Principal">Principal</option>
-							<option value="Vice Principal">Vice Principal</option>
-							<option value="Head of Department">Head of Department</option>
-							<option value="Subject Teacher">Subject Teacher</option>
+							<option value="Office Assistant">Office Assistant</option>
+							<option value="Secretary">Secretary</option>
+							<option value="Librarian">Librarian</option>
+							<option value="Others">Others</option>
 						</select>
                     </div>
                 </div>
@@ -138,13 +137,12 @@
                     <div class="form-group">
                         <label>Highest Qualification*</label><br>
                         <select name="qualification" required>
-							<option value="NCE">NCE</option>
-                            <option value="HND">HND</option>
-							<option value="B.Sc">B.Sc</option>
+							<option value="SSCE">SSCE</option>
+                            <option value="OND">OND</option>
+							<option value="HND">HND</option>
 							<option value="PGDE">PGDE</option>
+							<option value="B.Sc">B.Sc</option>
 							<option value="B.Arts">B.Arts</option>
-							<option value="M.Sc">M.Sc</option>
-							<option value="PhD">PhD</option>
 						</select>
                     </div>
                 </div>
@@ -174,21 +172,6 @@
                         <select name="current_posting_school" class="current_posting_school" required>
                         
 						</select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 col-sm-12">
-                    <div class="form-group">
-                        <label>Published Work (If Any)*</label>
-                        <input type="url" name="published_work" id="published_work" class="form-control" placeholder="E.g 'http://www.google.com' or https://" required>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="form-group">
-                        <label>Current Subject*</label>
-                        <input type="text" name="current_subject" id="current_subject" class="form-control" required>
                     </div>
                 </div>
             </div>
@@ -228,12 +211,6 @@
 							    <option value="{{ school.id }}">{{ school.name }} | {{ school.zone }}</option>
                             {% endfor %}
 						</select>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="form-group">
-                        <label>Previous Subjects Taught*</label><br>
-                        <input type="text" name="previous_subjects" id="previous_subjects" class="form-control" placeholder="List subject(s) you have taught apart from current subject">
                     </div>
                 </div>
             </div>
