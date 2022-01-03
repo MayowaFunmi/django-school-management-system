@@ -3,10 +3,10 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import get_template
 from xhtml2pdf import pisa
-from .models import Zone, School, TeachingSTaff, TeachingSTaffFiles
+from .models import Zone, School, TeachingSTaff, TeachingSTaffFiles, Subject
 
 # Create your views here.
 
@@ -108,9 +108,11 @@ def user_logout(request):
 def create_teacher_profile(request):
     all_zones = Zone.objects.all()
     all_schools = School.objects.order_by('zone')
+    all_subjects = Subject.objects.order_by('name')
     context = {
         'all_zones': all_zones,
-        'all_schools': all_schools
+        'all_schools': all_schools,
+        'all_subjects': all_subjects
     }
 
     if request.method == 'POST':
@@ -134,17 +136,31 @@ def create_teacher_profile(request):
         current_posting_zone_id = request.POST['current_posting_zone']
         current_posting_school_id = request.POST['current_posting_school']
         published_work = request.POST['published_work']
-        current_subject = request.POST['current_subject']
+        current_subject_id = request.POST['current_subject']
         previous_posting_1_id = request.POST['previous_posting_1']
         previous_posting_2_id = request.POST['previous_posting_2']
         previous_posting_3_id = request.POST['previous_posting_3']
-        previous_subjects = request.POST['previous_subjects']
+        other_subject_id = request.POST['other_subject']
 
+        if previous_posting_1_id == 'Not Available':
+            previous_posting_1 = None
+        else:
+            previous_posting_1 = School.objects.get(id=previous_posting_1_id)
+
+        if previous_posting_2_id == 'Not Available':
+            previous_posting_2 = None
+        else:
+            previous_posting_2 = School.objects.get(id=previous_posting_2_id)
+
+        if previous_posting_3_id == 'Not Available':
+            previous_posting_3 = None
+        else:
+            previous_posting_3 = School.objects.get(id=previous_posting_3_id)
+
+        current_subject = Subject.objects.get(id=current_subject_id)
         current_posting_zone = Zone.objects.get(id=current_posting_zone_id)
         current_posting_school = School.objects.get(id=current_posting_school_id)
-        previous_posting_1 = School.objects.get(id=previous_posting_1_id)
-        previous_posting_2 = School.objects.get(id=previous_posting_2_id)
-        previous_posting_3 = School.objects.get(id=previous_posting_3_id)
+        other_subject = Subject.objects.get(id=other_subject_id)
 
         teacher = TeachingSTaff.objects.get(user=request.user)
         teacher.title = title
@@ -170,19 +186,22 @@ def create_teacher_profile(request):
         teacher.previous_posting_2 = previous_posting_2
         teacher.previous_posting_3 = previous_posting_3
         teacher.current_subject = current_subject
-        teacher.previous_subjects = previous_subjects
+        teacher.other_subject = other_subject
         teacher.save()
 
         images = request.FILES.getlist('documents')
-        #document_title = request.POST.getlist('document_title')
-
+        document_title = request.POST.getlist('document_title[]')
+        print(document_title, type(document_title))
+        file_list = []
         for image in images:
             fs = FileSystemStorage()
             file_path = fs.save(image.name, image)
+            file_list.append(file_path)
 
-            teacher_files = TeachingSTaffFiles(user=teacher, documents=file_path)
+        print(file_list, type(file_list))
+        for key, value in zip(document_title, file_list):
+            teacher_files = TeachingSTaffFiles(user=teacher, document_title=key, documents=value)
             teacher_files.save()
-
         return redirect('/auths/display_teacher_profile/')
 
     return render(request, 'auths/create_teacher_profile.html', context)
@@ -210,9 +229,18 @@ def display_teacher_profile(request):
             'published_work': teacher.published_work, 'current_posting_zone': teacher.current_posting_zone,
             'current_posting_school': teacher.current_posting_school, 'previous_posting_1': teacher.previous_posting_1,
             'previous_posting_2': teacher.previous_posting_2, 'previous_posting_3': teacher.previous_posting_3,
-            'current_subject': teacher.current_subject, 'previous_subjects': teacher.previous_subjects,
+            'current_subject': teacher.current_subject, 'other_subject': teacher.other_subject,
         }
         return render(request, 'auths/display_teacher_profile.html', context)
+
+
+def teacher_docs(request):
+    teacher = TeachingSTaff.objects.get(user=request.user)
+    teacher_files = TeachingSTaffFiles.objects.filter(user=teacher)
+    context = {
+        'teacher_files': teacher_files
+    }
+    return render(request, 'auths/teacher_docs.html', context)
 
 
 @login_required

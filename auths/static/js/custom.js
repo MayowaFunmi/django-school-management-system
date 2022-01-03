@@ -131,8 +131,9 @@ $(document).ready(function() {
             }
         });
     });
-
+    //===========================================================================================
     // add multiple images
+    /*
     $('input#add_image').on('click', function(e) {
         e.preventDefault()
         var images = document.getElementById('images');
@@ -142,11 +143,11 @@ $(document).ready(function() {
         newInput.type = 'file';
         newInput.name = 'documents'
 
-        /* create input text element
+         create input text element
         var newInputText = document.createElement('input');
         newInputText.type = 'text';
         newInputText.name = 'document_title'
-        */
+        
 
         var preview = document.createElement('img')
         preview.style.width = '200px'
@@ -181,6 +182,46 @@ $(document).ready(function() {
     $('#close_btn').on('click', function() {
         $(this).remove()
     })
+    */
+    //=====================================================================================================
+    // add multiple images new
+    var maxField = 20; // input fields increment limitation
+    //var addButton = $('.add_button'); // add button selector
+    var images = $('#images'); // input field wrapper
+    var fieldHTML = `
+    <div>
+        <input name='document_title[]' type="text" value="" class="form-control" placeholder="Add Name OF Document">
+        <input type="file" name="documents">
+        <i class="fa fa-times close_btn"></i>
+    </div>
+    <br>`
+        //  onchange="showPreview(event);
+    var x = 1
+
+    $('input#add_image').on('click', function(e) {
+        e.preventDefault()
+            // check maximum number of input fields
+        if (x < maxField) {
+            images.append(fieldHTML);
+            x++
+        }
+    });
+
+    $(images).on('click', '.close_btn', function(e) {
+        e.preventDefault()
+        $(this).parent('div').remove()
+        x--
+    });
+
+    function showPreview(event) {
+        console.log('working')
+        if (event.target.files.length > 0) {
+            var src = URL.createObjectURL(event.target.files[0]);
+            var preview = $('#preview')
+            preview.src = src;
+            preview.style.display = 'block'
+        }
+    }
 
     // display button for zones and schools in update profile
     $('button#show_zone').click(function(e) {
@@ -274,6 +315,235 @@ $(document).ready(function() {
                 $('.show_answer').show()
             }
         });
+    });
+
+    // solve quadratic equations
+
+    $('form#quadratic_eqn').submit(function(e) {
+        e.preventDefault()
+        $('.result').empty()
+        var a_1 = $("input[name='a_1']").val()
+        var b_1 = $("input[name='b_1']").val()
+        var c_1 = $("input[name='c_1']").val()
+        var csrfmiddlewaretoken = $('input[name="csrfmiddlewaretoken"]').val();
+
+        if (parseInt(a_1) == 0) {
+            alert('The Coefficient of x 2 cannot be Zero')
+        } else {
+            $.ajax({
+                //method: 'POST',
+                url: '/mathematics/quadratic_eqn_answer/',
+                data: {
+                    'a_1': a_1,
+                    'b_1': b_1,
+                    'c_1': c_1,
+                    'csrfmiddlewaretoken': csrfmiddlewaretoken
+                },
+                dataType: 'json',
+                success: function(data) {
+                    $('.result').append(`
+                        <h3>${data.info}</h3>
+                        <h3>Value of root 1 = ${data.root_1}</h3>
+                        <h3>Value of root 2 = ${data.root_2}</h3>
+                    `)
+                    $('.result').show()
+                }
+            });
+        }
     })
+
+    // Convert from base 10 to another base
+
+    $('form#convert_from_10').submit(function(e) {
+        e.preventDefault()
+        $('.from_base_10').empty()
+        var num_10 = $("input[name='num_10']").val()
+        var num_x = $("input[name='num_x']").val()
+        var csrfmiddlewaretoken = $('input[name="csrfmiddlewaretoken"]').val();
+
+        if ((parseInt(num_10) < 0) || (parseInt(num_x) < 0)) {
+            alert('Number cannot be negative')
+        } else if (parseInt(num_x) < 2) {
+            alert('Base cannot be less than 2')
+        } else if ((parseInt(num_10) == 0) || (parseInt(num_x) == 0)) {
+            alert('Number cannot be Zero')
+        } else if (parseInt(num_10) % 1 != 0) {
+            alert('The base 10 number must be a whole number')
+        } else {
+            $.ajax({
+                //method: 'POST',
+                url: '/mathematics/from_base_10_answer/',
+                data: {
+                    'num_10': num_10,
+                    'num_x': num_x,
+                    'csrfmiddlewaretoken': csrfmiddlewaretoken
+                },
+                dataType: 'json',
+                success: function(data) {
+                    $('.from_base_10').append(`
+                        <h3>The value of ${num_10} from base 10 to base ${num_x} = ${data.value}</h3>
+                    `)
+                    $('.from_base_10').show()
+                }
+            });
+        }
+    });
+
+    // Convert from another base to base 10
+
+    $('form#to_base_10').submit(function(e) {
+        e.preventDefault()
+        $('.to_base_10').empty()
+        var number = $("input[name='number']").val()
+        var base = $("input[name='base']").val()
+        var csrfmiddlewaretoken = $('input[name="csrfmiddlewaretoken"]').val();
+
+        if (greatestDigit(number) >= parseInt(base)) {
+            alert('The base of the number cannot be less or equal to the largest digit of the number')
+        } else if ((parseInt(number) < 0) || (parseInt(base) < 0)) {
+            alert('Number cannot be negative')
+        } else if (parseInt(number) == 0) {
+            alert('The base 10 number cannot be Zero')
+        } else if (parseInt(number) % 1 != 0) {
+            alert('The base 10 number must be a whole number')
+        } else {
+            $.ajax({
+                //method: 'POST',
+                url: '/mathematics/to_base_10_answer/',
+                data: {
+                    'number': number,
+                    'base': base,
+                    'csrfmiddlewaretoken': csrfmiddlewaretoken
+                },
+                dataType: 'json',
+                success: function(data) {
+                    $('.to_base_10').append(`
+                        <h3>The value of ${number} from base ${base} to base 10 = ${data.converted}</h3>
+                    `)
+                    $('.to_base_10').show()
+                }
+            });
+        }
+    });
+
+    // Addition in number bases
+    $("input.add_more_number").on('click', function(event) {
+        event.preventDefault()
+        var new_fields = `
+            <div class="more_inputs">
+                <h3>Add Another Number:</h3>
+                <div class="form-group">
+                    <label>Enter the new number*</label>
+                    <input name="nums" id="nums" class="form-control" type="text" required>
+                </div>
+    
+                <div class="form-group">
+                    <label>Enter the base of the new number*</label>
+                    <input name="bases" id="bases" class="form-control" type="number" required>
+                </div>
+            </div>
+        `
+        $(".add_input").append(new_fields)
+        $(".add_input").show();
+    })
+
+    $('form#add_bases').submit(function(e) {
+        e.preventDefault()
+        $('.add_bases').empty()
+        var num1 = $("input[name='num1']").val()
+        var base1 = $("input[name='base1']").val()
+        var num2 = $("input[name='num2']").val()
+        var base2 = $("input[name='base2']").val()
+        var add_base = $("input[name='add_base']").val()
+        var nums = $("input[name^='nums']")
+        var bases = $("input[name^='bases']")
+        var csrfmiddlewaretoken = $('input[name="csrfmiddlewaretoken"]').val();
+
+        var bases_list = bases.map(function(index, elem) {
+            return $(elem).val()
+        }).get()
+        bases_list = bases_list.map(Number)
+
+        var nums_list = nums.map(function(index, elem) {
+            return $(elem).val()
+        }).get()
+        nums_list = nums_list.map(Number)
+
+        // do: add condition to reject if number is not a - f
+        checkValidInput(num1)
+        checkValidInput(num2)
+            /*
+            for (var i = 0; i < bases_list.length; i++) {
+                checkValidInput(bases_list[i])
+            }
+
+            for (var j = 0; j < nums_list.length; j++) {
+                //console.log(nums_list[j])
+                //checkValidInput(nums_list[j])
+                var inputs = /^[0-9a-fA-F]+$/;
+                if (nums_list[j].match(inputs)) {
+                    return true
+                } else {
+                    alert(nums_list[j] + ' contains invalid characters');
+                    history.go(0);
+                }
+            }
+            */
+
+        if ((greatestDigit(num1) >= parseInt(base1)) && (greatestDigit(num2) >= parseInt(base2))) {
+            alert('The base of the number cannot be less or equal to the largest digit of the number')
+        } else if ((parseInt(num1) < 0) && (parseInt(base1) < 0) && (parseInt(num2) < 0) && (parseInt(base2) < 0) && (parseInt(add_base) < 0)) {
+            alert('Number cannot be negative')
+        } else if ((parseInt(num1) == 0) && (parseInt(base1) == 0) && (parseInt(num2) == 0) && (parseInt(base2) == 0)) {
+            alert('Number cannot be Zero')
+        } else if (parseInt(add_base) % 1 != 0) {
+            alert('The base 10 number must be a whole number')
+        } else if (parseInt(add_base) < 2) {
+            alert('Base cannot be less than 2')
+        } else {
+            $.ajax({
+                //method: 'POST',
+                url: '/mathematics/add_bases_answer/',
+                data: {
+                    'num1': num1,
+                    'base1': base1,
+                    'num2': num2,
+                    'base2': base2,
+                    'add_base': add_base,
+                    'nums_list': nums_list,
+                    'bases_list': bases_list,
+                    'csrfmiddlewaretoken': csrfmiddlewaretoken
+                },
+                dataType: 'json',
+                success: function(data) {
+                    $('.add_bases').append(`
+                    <h3>${num1}<sub>${base1}</sub> + ${num2}<sub>${base2}</sub> = ${data.result}<sub>${add_base}</sub></h3>                
+                `)
+                    $('.add_bases').show()
+                }
+            });
+        }
+    });
+
+    // function to get largest digit in a number
+    const greatestDigit = (num = 0, greatest = 0) => {
+        if (num) {
+            const max = Math.max(num % 10, greatest);
+            return greatestDigit(Math.floor(num / 10), max);
+        };
+        return greatest
+    }
+    return greatestDigit(num);
+
+    // check if inputs include numbers and letters a to f only
+    function checkValidInput(inputTexts) {
+        var letters = /^[0-9a-fA-F]+$/;
+        if (inputTexts.match(letters)) {
+            return true
+        } else {
+            alert(inputTexts + ' contains invalid characters');
+            history.go(0);
+        }
+    }
 
 });

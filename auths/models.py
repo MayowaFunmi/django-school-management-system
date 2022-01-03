@@ -86,7 +86,7 @@ class Department(models.Model):
     department = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.dept
+        return self.department
 
     class Meta:
         ordering = ('id',)
@@ -180,8 +180,8 @@ class TeachingSTaff(models.Model):
     previous_posting_1 = models.ForeignKey(School, on_delete=models.CASCADE, related_name='posting_1', null=True)
     previous_posting_2 = models.ForeignKey(School, on_delete=models.CASCADE, related_name='posting_2', null=True)
     previous_posting_3 = models.ForeignKey(School, on_delete=models.CASCADE, related_name='posting_3', null=True)
-    current_subject = models.CharField(max_length=100, null=True)
-    previous_subjects = models.CharField(max_length=200, null=True)
+    current_subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='current', null=True)
+    other_subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='other', null=True)
 
     class Meta:
         ordering = ('id',)
@@ -194,8 +194,13 @@ class TeachingSTaff(models.Model):
 
 class TeachingSTaffFiles(models.Model):
     user = models.ForeignKey(TeachingSTaff, on_delete=models.CASCADE)
-    #document_title = models.CharField(max_length=100)
+    document_title = models.CharField(max_length=100)
     documents = models.FileField(upload_to='Teachers_Files/%Y/%m/%d/')
+
+    class Meta:
+        ordering = ('id',)
+        verbose_name = 'Teaching Staff File'
+        verbose_name_plural = 'Teaching Staff Files'
 
     def __str__(self):
         return f'Files for {self.user.title} {self.user.user.last_name}'

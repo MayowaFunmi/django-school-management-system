@@ -1,0 +1,53 @@
+{% extends 'auths/base.html' %}
+{% load static %}
+
+{% block title %}Mathematics | Number Base Systems{% endblock title %}
+
+{% block content %}
+<div class="container contact-comment-section">
+    <h3><center>Solutions To Number Base Systems</center></h3>
+    <div id="form-messages">
+      {% if messages %}
+        {% for message in messages %}
+          <h3 style="text-align: center;">{{ message }}</h3>
+        {% endfor %}
+      {% endif %}
+    </div>
+    <form id="convert_from_10">
+      {% csrf_token %}
+        <fieldset>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <h3>Conversion from base 10 to another base:</h3>
+                    <p>
+                        Note: A = 10, B = 11, C = 12, D = 13, E = 14, F = 15
+                    </p>
+                    <h3>Provide Your Data Here:</h3>
+                    <div class="form-group">
+                        <label>Enter the base 10 number you want to convert*</label>
+                        <input name="num_10" id="num_10" class="form-control" type="number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter the base you want to convert to*</label>
+                        <input name="num_x" id="num_x" class="form-control" type="number" required>
+                    </div>
+                    
+                </div>
+                
+                <div class="col-md-6 col-sm-12">
+                    <h3>Solution Center:</h3>
+                    <div class="form-group from_base_10" style="display: none">
+
+                    </div>
+                </div>
+            </div>
+          
+            <div class="form-group mb-0">
+                <input class="btn-send" type="submit" value="Convert">
+            </div>
+
+        </fieldset>
+    </form>
+</div>
+{% endblock content %}

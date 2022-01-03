@@ -188,7 +188,11 @@
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
                         <label>Current Subject*</label>
-                        <input type="text" name="current_subject" id="current_subject" class="form-control" required>
+                        <select name="current_subject">
+                            {% for subject in all_subjects %}
+							    <option value="{{ subject.id }}">{{ subject.name }}</option>
+                            {% endfor %}
+						</select>
                     </div>
                 </div>
             </div>
@@ -232,14 +236,18 @@
                 </div>
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
-                        <label>Previous Subjects Taught*</label><br>
-                        <input type="text" name="previous_subjects" id="previous_subjects" class="form-control" placeholder="List subject(s) you have taught apart from current subject">
+                        <label>Other Subject You Can Teach*</label><br>
+                        <select name="other_subject">
+                            {% for subject in all_subjects %}
+							    <option value="{{ subject.id }}">{{ subject.name }}</option>
+                            {% endfor %}
+						</select>
                     </div>
                 </div>
             </div>
 
             <div class="row">
-                <div>
+                <div class="col-md-6 col-sm-12">
                     <div>
                         <label>Upload Document Files*</label><br>
                         <div id="images">
@@ -247,6 +255,16 @@
                         </div>
                         <div class="form-group mb-0">
                             <input id="add_image" class="btn-send" type="submit" value="Add Documents">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-sm-12">
+                    <div>
+                        <label>Document Preview</label><br>
+                        <div class="preview">
+                            <img id="preview">
+
                         </div>
                     </div>
                 </div>

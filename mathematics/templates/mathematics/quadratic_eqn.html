@@ -1,0 +1,56 @@
+{% extends 'auths/base.html' %}
+{% load static %}
+
+{% block title %}Mathematics | Quadratic Equations{% endblock title %}
+
+{% block content %}
+<div class="container contact-comment-section">
+    <h3><center>Solution To Quadratic Equations</center></h3>
+    <h3>General form of Quadratic equation:</h3>
+    <h1>ax<sup>2</sup> + bx + c = 0</h1>
+    <div id="form-messages">
+      {% if messages %}
+        {% for message in messages %}
+          <h3 style="text-align: center;">{{ message }}</h3>
+        {% endfor %}
+      {% endif %}
+    </div>
+    <form id="quadratic_eqn">
+      {% csrf_token %}
+        <fieldset>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <h3>Provide Your Data Here:</h3>
+                    <div class="form-group">
+                        <label>Enter the coefficient of x<sup>2</sup> (i.e 'a')*</label>
+                        <input name="a_1" id="a_1" class="form-control" type="number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter the coefficient of x (i.e 'b')*</label>
+                        <input name="b_1" id="b_1" class="form-control" type="number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter the constant (i.e 'c')*</label>
+                        <input name="c_1" id="c_1" class="form-control" type="number" required>
+                    </div>
+                    
+                </div>
+                
+                <div class="col-md-6 col-sm-12">
+                    <h3>Solution Center:</h3>
+                    <div class="form-group result" style="display: none">
+
+                    </div>
+                </div>
+            </div>
+          
+            <div class="form-group mb-0">
+                <input class="btn-send" type="submit" value="Solve Equation">
+            </div>
+
+        </fieldset>
+    </form>
+</div>
+{% endblock content %}
