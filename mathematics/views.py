@@ -196,3 +196,48 @@ class AddBases(LoginRequiredMixin, View):
             'result': sum_con
         }
         return JsonResponse(data)
+
+
+@login_required
+def subtract_bases(request):
+    return render(request, 'mathematics/subtract_bases.html')
+
+
+class SubtractBases(LoginRequiredMixin, View):
+    def get(self, request):
+        sub_num1 = request.GET.get('sub_num1', None)
+        sub_base1 = request.GET.get('sub_base1', None)
+        sub_num2 = request.GET.get('sub_num2', None)
+        sub_base2 = request.GET.get('sub_base2', None)
+        subtract_base = request.GET.get('subtract_base', None)
+        # sub_nums_list = request.GET.getlist('sub_nums_list[]', None)
+        # sub_bases_list = request.GET.getlist('sub_bases_list[]', None)
+        # subtract_list = []
+        # first convert to base 10
+        number_1 = int(sub_num1, int(sub_base1))
+        number_2 = int(sub_num2, int(sub_base2))
+        # for number, base in zip(sub_nums_list, sub_bases_list):
+        #     con = int(number, int(base))
+        #     subtract_list.append(con)
+        # print(subtract_list)
+        # subtract_list_sum = sum(subtract_list)
+
+        # subtrace the numbers in base 10
+        add_in_10 = number_1 - number_2
+        # convert to the desired base
+        subtract_con = from_base_10_func(add_in_10, int(subtract_base))
+
+        data = {
+            'result': subtract_con
+        }
+        return JsonResponse(data)
+
+
+@login_required
+def multiply_bases(request):
+    return render(request, 'mathematics/multiply_bases.html')
+
+
+@login_required
+def calculator(request):
+    return render(request, 'mathematics/calculator.html')

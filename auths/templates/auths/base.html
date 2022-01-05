@@ -266,10 +266,12 @@
                                                         <li> <a href="{% url 'mathematics:from_base_10' %}">Convert From Base 10</a> </li>
                                                         <li> <a href="{% url 'mathematics:to_base_10' %}">Convert To Base 10</a> </li>
                                                         <li> <a href="{% url 'mathematics:add_bases' %}">Number Base Addition</a> </li>
+                                                        <li> <a href="{% url 'mathematics:subtract_bases' %}">Number Base Subtraction</a> </li>
+                                                        <li> <a href="{% url 'mathematics:multiply_bases' %}">Number Base Multiplication</a> </li>
                                                     </ul>
                                                 </li>
 
-                                                <li><a href="cart.html">Cart</a></li>
+                                                <li><a href="{% url 'mathematics:calculator' %}">Calculator</a></li>
                                                 <li><a href="checkout.html">Checkout</a></li>
 
                                                 <li><a href="error-404.html">Error 404</a></li>

@@ -1,0 +1,77 @@
+{% extends 'auths/base.html' %}
+{% load static %}
+
+{% block title %}Mathematics | Number Base Systems{% endblock title %}
+
+{% block content %}
+<div class="container contact-comment-section">
+    <h3><center>Solutions To Multiplication In Number Base Systems</center></h3>
+    <h3>Multiplication Of Numbers:</h3>
+    <p>Note: A = 10, B = 11, C = 12, D = 13, E = 14, F = 15</p>
+    <div id="form-messages">
+      
+      {% if messages %}
+        {% for message in messages %}
+          <h3 style="text-align: center;">{{ message }}</h3>
+        {% endfor %}
+      {% endif %}
+    </div>
+    <form id="multiply_bases">
+      {% csrf_token %}
+        <fieldset>
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <h3>Provide Your Data Here:</h3>
+                    <div class="form-group">
+                        <label>Enter the first number*</label>
+                        <input name="mul_num1" id="mul_num1" class="form-control" type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter the base of the first number*</label>
+                        <input name="mul_base1" id="mul_base1" class="form-control" type="number" required>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 col-sm-12">
+                    <h3>Provide Your Data Here:</h3>
+                    <div class="form-group">
+                        <label>Enter the second number*</label>
+                        <input name="mul_num2" id="mul_num2" class="form-control" type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter the base of the second number*</label>
+                        <input name="mul_base2" id="mul_base2" class="form-control" type="number" required>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 col-sm-12 multiply_input" style="display: none;">
+                
+                </div>
+                
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label>Enter the base of the multiplication*</label>
+                        <input name="multiply_base" id="multiply_base" class="form-control" type="number" required>
+                    </div>
+                    
+                    <div class="form-group mb-0">
+                    
+                    </div>
+                    
+                    <h3>Solution Center:</h3>
+                    <div class="form-group multiply_bases" style="display: none">
+
+                    </div>
+                </div>
+            </div>
+          
+            <div class="form-group mb-0">
+                <input class="btn-send multiply_more_number" type="submit" value="Provide More Numbers">
+                <input class="btn-send" type="submit" value="Multiply Numbers">
+            </div>
+        </fieldset>
+    </form>
+</div>
+{% endblock content %}

@@ -17,4 +17,8 @@ urlpatterns = [
     path('to_base_10_answer/', views.ToBase10.as_view(), name='to_base_10_answer'),
     path('add_bases/', views.add_bases, name='add_bases'),
     path('add_bases_answer/', views.AddBases.as_view(), name='add_bases_answer'),
+    path('subtract_bases/', views.subtract_bases, name='subtract_bases'),
+    path('subtract_bases_answer/', views.SubtractBases.as_view(), name='subtract_bases_answer'),
+    path('multiply_bases/', views.multiply_bases, name='multiply_bases'),
+    path('calculator/', views.calculator, name='calculator'),
 ]

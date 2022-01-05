@@ -525,6 +525,177 @@ $(document).ready(function() {
         }
     });
 
+    // Subtraction in number bases
+
+    $('form#subtract_bases').submit(function(e) {
+        e.preventDefault()
+        $('.subtract_bases').empty()
+        var sub_num1 = $("input[name='sub_num1']").val()
+        var sub_base1 = $("input[name='sub_base1']").val()
+        var sub_num2 = $("input[name='sub_num2']").val()
+        var sub_base2 = $("input[name='sub_base2']").val()
+        var subtract_base = $("input[name='subtract_base']").val()
+            //var sub_nums = $("input[name^='sub_nums']")
+            //var sub_bases = $("input[name^='sub_bases']")
+        var csrfmiddlewaretoken = $('input[name="csrfmiddlewaretoken"]').val();
+
+        // do: add condition to reject if number is not a - f
+        checkValidInput(sub_num1)
+        checkValidInput(sub_num2)
+            /*
+            for (var i = 0; i < bases_list.length; i++) {
+                checkValidInput(bases_list[i])
+            }
+
+            for (var j = 0; j < nums_list.length; j++) {
+                //console.log(nums_list[j])
+                //checkValidInput(nums_list[j])
+                var inputs = /^[0-9a-fA-F]+$/;
+                if (nums_list[j].match(inputs)) {
+                    return true
+                } else {
+                    alert(nums_list[j] + ' contains invalid characters');
+                    history.go(0);
+                }
+            }
+            */
+            // convert numbers to base 10
+        var x = toBase10(sub_num1, sub_base1)
+        var y = toBase10(sub_num2, sub_base2)
+        if (x <= y) {
+            alert(`
+                ${sub_num1} base ${sub_base1} is less than ${sub_num2} base ${sub_base2}. Subtraction Impossible.
+            `)
+            history.go(0);
+        } else if ((greatestDigit(sub_num1) >= parseInt(sub_base1)) && (greatestDigit(sub_num2) >= parseInt(sub_base2))) {
+            alert('The base of the number cannot be less or equal to the largest digit of the number')
+        } else if ((parseInt(sub_num1) < 0) && (parseInt(sub_base1) < 0) && (parseInt(sub_num2) < 0) && (parseInt(sub_base2) < 0) && (parseInt(subtract_base) < 0)) {
+            alert('Number cannot be negative')
+        } else if ((parseInt(sub_num1) == 0) && (parseInt(sub_base1) == 0) && (parseInt(sub_num2) == 0) && (parseInt(sub_base2) == 0)) {
+            alert('Number cannot be Zero')
+        } else if (parseInt(subtract_base) % 1 != 0) {
+            alert('The base 10 number must be a whole number')
+        } else if (parseInt(subtract_base) < 2) {
+            alert('Base cannot be less than 2')
+        } else {
+            $.ajax({
+                //method: 'POST',
+                url: '/mathematics/subtract_bases_answer/',
+                data: {
+                    'sub_num1': sub_num1,
+                    'sub_base1': sub_base1,
+                    'sub_num2': sub_num2,
+                    'sub_base2': sub_base2,
+                    'subtract_base': subtract_base,
+                    'csrfmiddlewaretoken': csrfmiddlewaretoken
+                },
+                dataType: 'json',
+                success: function(data) {
+                    $('.subtract_bases').append(`
+                        <h3>${sub_num1}<sub>${sub_base1}</sub> - ${sub_num2}<sub>${sub_base2}</sub> = ${data.result}<sub>${subtract_base}</sub></h3>                
+                    `)
+                    $('.subtract_bases').show()
+                }
+            });
+        }
+    });
+
+    // Subtraction in number bases
+    $("input.multiply_more_number").on('click', function(event) {
+        event.preventDefault()
+        var new_inputs = `
+            <div class="more_inputs">
+                <h3>Multiply Another Number:</h3>
+                <div class="form-group">
+                    <label>Enter the new number*</label>
+                    <input name="mul_nums" class="form-control" type="text" required>
+                </div>
+    
+                <div class="form-group">
+                    <label>Enter the base of the new number*</label>
+                    <input name="mul_bases" class="form-control" type="number" required>
+                </div>
+            </div>
+        `
+        $(".multiply_input").append(new_inputs)
+        $(".multiply_input").show();
+    });
+
+    // multiply bases
+    $('form#multiply_bases').submit(function(e) {
+        e.preventDefault()
+        $('.multiply_bases').empty()
+        var mul_num1 = $("input[name='mul_num1']").val()
+        var mul_base1 = $("input[name='mul_base1']").val()
+        var mul_num2 = $("input[name='mul_num2']").val()
+        var mul_base2 = $("input[name='mul_base2']").val()
+        var multiply_base = $("input[name='multiply_base']").val()
+        var mul_nums = $("input[name^='mul_nums']")
+        var mul_bases = $("input[name^='mul_bases']")
+        var csrfmiddlewaretoken = $('input[name="csrfmiddlewaretoken"]').val();
+        var new_list = []; // converted numbers to be multiplied
+        var mul_list = 1; // multiplication result of converted numbers
+        var mul_bases_list = mul_bases.map(function(index, elem) {
+            return $(elem).val()
+        }).get()
+        mul_bases_list = mul_bases_list.map(Number)
+
+        var mul_nums_list = mul_nums.map(function(index, elem) {
+            return $(elem).val()
+        }).get()
+        mul_nums_list = mul_nums_list.map(Number)
+
+        // do: add condition to reject if number is not a - f
+        checkValidInput(mul_num1)
+        checkValidInput(mul_num2)
+        if (mul_nums_list.length !== 0 && mul_bases_list !== 0) {
+            for (var i = 0; i < mul_nums_list.length; i++) {
+                console.log(mul_nums_list[i], mul_bases_list[i])
+                var m = parseInt(mul_nums_list[i], mul_bases_list[i])
+                new_list.push(m)
+            }
+        } else {
+            mul_list = 1;
+        }
+        console.log(mul_list)
+        console.log(new_list)
+        if (new_list.length > 0) {
+            for (var x = 0; x < new_list.length; x++) {
+                while (x < new_list.length) {
+                    var y = new_list[x] * new_list[x + 1]
+                    mul_list *= y;
+                    x += 2;
+                }
+            }
+        } else {
+            mul_list = 1;
+        }
+        console.log(mul_list)
+        if ((greatestDigit(mul_num1) >= parseInt(mul_base1)) && (greatestDigit(mul_num2) >= parseInt(mul_base2))) {
+            alert('The base of the number cannot be less or equal to the largest digit of the number')
+        } else if ((parseInt(mul_num1) < 0) && (parseInt(mul_base1) < 0) && (parseInt(mul_num2) < 0) && (parseInt(mul_base2) < 0) && (parseInt(multiply_base) < 0)) {
+            alert('Number cannot be negative')
+        } else if ((parseInt(mul_num1) == 0) && (parseInt(mul_base1) == 0) && (parseInt(mul_num2) == 0) && (parseInt(mul_base2) == 0)) {
+            alert('Number cannot be Zero')
+        } else if (parseInt(multiply_base) % 1 != 0) {
+            alert('The base 10 number must be a whole number')
+        } else if (parseInt(multiply_base) < 2) {
+            alert('Base cannot be less than 2')
+        } else {
+            // convert all numbers to base 10
+            var num_10 = toBase10(mul_num1, mul_base1);
+            var num_20 = toBase10(mul_num2, mul_base2);
+            // multiply numbers in base 10
+            var multiplied = num_10 * num_20 * mul_list;
+            // convert back to the needed base
+            var result = fromBase10(multiplied, multiply_base);
+            $('.multiply_bases').append(`
+                <h3>${mul_num1}<sub>${mul_base1}</sub> X ${mul_num2}<sub>${mul_base2}</sub> = ${result}<sub>${multiply_base}</sub></h3>                
+            `)
+            $('.multiply_bases').show()
+        }
+    });
+
     // function to get largest digit in a number
     const greatestDigit = (num = 0, greatest = 0) => {
         if (num) {
@@ -544,6 +715,13 @@ $(document).ready(function() {
             alert(inputTexts + ' contains invalid characters');
             history.go(0);
         }
+    };
+
+    function toBase10(inputs, base) {
+        return parseInt(inputs, base);
     }
 
+    function fromBase10(numb, base) {
+        return numb.toString(base)
+    }
 });

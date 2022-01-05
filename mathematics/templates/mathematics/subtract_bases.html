@@ -1,0 +1,76 @@
+{% extends 'auths/base.html' %}
+{% load static %}
+
+{% block title %}Mathematics | Number Base Systems{% endblock title %}
+
+{% block content %}
+<div class="container contact-comment-section">
+    <h3><center>Solutions To Subtraction In Number Base Systems</center></h3>
+    <h3>Subtraction Of Numbers:</h3>
+    <p>Note: A = 10, B = 11, C = 12, D = 13, E = 14, F = 15</p>
+    <div id="form-messages">
+      
+      {% if messages %}
+        {% for message in messages %}
+          <h3 style="text-align: center;">{{ message }}</h3>
+        {% endfor %}
+      {% endif %}
+    </div>
+    <form id="subtract_bases">
+      {% csrf_token %}
+        <fieldset>
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+                    <h3>Provide Your Data Here:</h3>
+                    <div class="form-group">
+                        <label>Enter the first number*</label>
+                        <input name="sub_num1" id="sub_num1" class="form-control" type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter the base of the first number*</label>
+                        <input name="sub_base1" id="sub_base1" class="form-control" type="number" required>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 col-sm-12">
+                    <h3>Provide Your Data Here:</h3>
+                    <div class="form-group">
+                        <label>Enter the second number*</label>
+                        <input name="sub_num2" id="sub_num2" class="form-control" type="text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter the base of the second number*</label>
+                        <input name="sub_base2" id="sub_base2" class="form-control" type="number" required>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 col-sm-12 subtract_input" style="display: none;">
+                
+                </div>
+                
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label>Enter the base of the subtraction*</label>
+                        <input name="subtract_base" id="subtract_base" class="form-control" type="number" required>
+                    </div>
+                    
+                    <div class="form-group mb-0">
+                    
+                    </div>
+                    
+                    <h3>Solution Center:</h3>
+                    <div class="form-group subtract_bases" style="display: none">
+
+                    </div>
+                </div>
+            </div>
+          
+            <div class="form-group mb-0">
+                <input class="btn-send" type="submit" value="Subtract Numbers">
+            </div>
+        </fieldset>
+    </form>
+</div>
+{% endblock content %}
