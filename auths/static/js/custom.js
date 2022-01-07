@@ -16,7 +16,103 @@ function showPassword2() {
     }
 };
 
+function Equation() {
+
+    var equation;
+
+    this.setEquation = function(value) {
+        equation = value;
+    }
+    this.getEquation = function() {
+        return equation;
+    }
+
+    this.yGivenX = function(x) {
+
+        var eqx = equation;
+
+        if (!this.validateEq()) return;
+
+        //expand coeffecients : 2x -> 2*x
+        eqx = eqx.replace(/([0-9])x/g, "$1*x");
+
+        //fill in the value of x
+        eqx = eqx.replace(/[xX]/g, x);
+
+        //var yCordinate = eval(eqx);
+        return eqx;
+    }
+
+
+    this.validateEq = function() {
+
+        var validEquationRegex =
+            new RegExp('^\\s*(?:(?:(?:[0-9]+(?!\\.))|' +
+                '(?:[0-9]+\\.[0-9]+))|(?:(?:[0-9]+(?!\\.))' +
+                '|(?:[0-9]*\\.[0-9]+))*[xX])(?:\\s*[*+\\/-]' +
+                '\\s*(?:(?:(?:[0-9]+(?!\\.))|(?:[0-9]+\\.' +
+                '[0-9]+))+|(?:(?:[0-9]+(?!\\.))|(?:[0-9]*' +
+                '\\.[0-9]+))*[xX]))*\\s*$');
+
+        var isValidEq = validEquationRegex.exec(equation);
+
+        return isValidEq != null;
+    }
+} // end of Equation
+
 $(document).ready(function() {
+
+    $("form#chart_form").submit(function(e) {
+        e.preventDefault()
+        var get_input = $("input[name='textInput']").val();
+        var min_val = $("input[name='min']").val();
+        var max_val = $("input[name='max']").val();
+        var my_chart = $("#my_chart");
+        var messageBanner = document.getElementById('messageBanner');
+        var myEq = new Equation()
+        myEq.setEquation(get_input)
+        if (!myEq.validateEq()) {
+            messageBanner.innerText =
+                "The equation must contain only real numbers and the variable x. You can use multiplication, division," +
+                " addition, and subtraction. Eg: 5x + 100 * 1.5x"
+            return;
+        }
+        var my_eqn = myEq.yGivenX('x')
+        console.log(my_eqn)
+
+        var xValues = [];
+        var yValues = [];
+        generateData(my_eqn, min_val, max_val);
+
+        new Chart(my_chart, {
+            type: 'line',
+            data: {
+                labels: xValues,
+                datasets: [{
+                    label: "Line Graph",
+                    fill: false,
+                    pointRadius: 1,
+                    borderColor: "rgba(255,0,0,0.5)",
+                    data: yValues
+                }]
+            },
+            options: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: "y = " + my_eqn,
+                    fontSize: 16
+                }
+            }
+        });
+
+        function generateData(value, x, y, step = 1) {
+            for (let i = x; i <= y; i += step) {
+                yValues.push(eval(value));
+                xValues.push(i)
+            }
+        };
+    })
 
     // calculate age from date of birth
 
@@ -723,5 +819,6 @@ $(document).ready(function() {
 
     function fromBase10(numb, base) {
         return numb.toString(base)
-    }
+    };
+
 });

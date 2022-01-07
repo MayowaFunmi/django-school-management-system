@@ -1,0 +1,20 @@
+{% extends 'charts/chart_base.html' %}
+{% load static %}
+
+{% block chart_title %}Testing Charts{% endblock chart_title %}
+
+{% block chart_content %}
+    <div id="messageBanner">
+    
+    </div>
+    <form id="chart_form">
+        <label>Enter A Linear Equation(e.g 3x + 2):</label>
+        y = <input type="text" name="textInput" id="my_text" required>
+        <label>Enter The Minimum Value Of X:</label>
+        <input type="text" name="min" id="min" required>
+        
+        <label>Enter The Maximum Value Of X:</label>
+        <input type="text" name="max" id="max" required>
+        <input type="submit" value="Submit" id='chart_submit'>
+    </form>
+{% endblock chart_content %}

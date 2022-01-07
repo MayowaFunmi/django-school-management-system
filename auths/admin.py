@@ -41,5 +41,6 @@ admin.site.register(Department)
 admin.site.register(Class)
 admin.site.register(Level)
 admin.site.register(TeachingSTaffFiles)
+admin.site.register(NonTeachingSTaffFiles)
 
 admin.site.site_header = 'School Management Admin'

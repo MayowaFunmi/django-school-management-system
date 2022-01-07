@@ -257,7 +257,7 @@ class NonTeachingStaff(models.Model):
     # work related info
     designation = models.CharField(choices=DESIGNATION, max_length=100)
     grade_level = models.CharField(max_length=20, help_text='E.g, Level 8 Step 2')
-    first_appointment = models.DateField(blank=True, null=True)
+    first_appointment = models.DateField(null=True)
     years_in_service = models.CharField(max_length=15, null=True)
     qualification = models.CharField(choices=QUALIFICATION, max_length=10, null=True)
     discipline = models.CharField(max_length=200, null=True)
@@ -278,6 +278,7 @@ class NonTeachingStaff(models.Model):
 
 class NonTeachingSTaffFiles(models.Model):
     user = models.ForeignKey(NonTeachingStaff, on_delete=models.CASCADE)
+    document_title = models.CharField(max_length=100)
     documents = models.FileField(upload_to='Non_Teachers_Files/%Y/%m/%d/')
 
     def __str__(self):
@@ -297,6 +298,7 @@ class Student(models.Model):
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     middle_name = models.CharField(max_length=25, help_text='Enter your middle name here if any', null=True)
+    admission_year = models.CharField(max_length=100, null=True)
     current_school = models.ForeignKey(School, on_delete=models.CASCADE, verbose_name='Name of current school', null=True, related_name='school')
     department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True)
     std_class = models.ForeignKey(Class, on_delete=models.CASCADE, verbose_name='Class', null=True)
@@ -313,8 +315,10 @@ class Student(models.Model):
     student_phone_number = models.CharField(max_length=20, null=True)
     father_name = models.CharField(choices=GENDER, max_length=10, null=True, verbose_name="Father's Full Name")
     father_phone = models.CharField(choices=GENDER, max_length=10, null=True, verbose_name="Father's Phone Number")
+    father_img = models.ImageField(upload_to='Parents_Fathers/%Y/%m/%d/', null=True)
     mother_name = models.CharField(choices=GENDER, max_length=10, null=True, verbose_name="Mother's Full Name")
     mother_number = models.CharField(choices=GENDER, max_length=10, null=True, verbose_name="Mother's Phone Number")
+    mother_img = models.ImageField(upload_to='Parents_Mothers/%Y/%m/%d/', null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
@@ -329,6 +333,7 @@ class Student(models.Model):
 
 class StudentFiles(models.Model):
     user = models.ForeignKey(Student, on_delete=models.CASCADE)
+    document_title = models.CharField(max_length=100)
     documents = models.FileField(upload_to='Student_files/%Y/%m/%d/')
 
     def __str__(self):

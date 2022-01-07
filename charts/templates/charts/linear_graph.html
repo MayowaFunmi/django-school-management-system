@@ -1,0 +1,51 @@
+{% extends 'charts/chart_base.html' %}
+{% load static %}
+
+{% block chart_title %}Testing Charts{% endblock chart_title %}
+
+{% block chart_content %}
+<div class="container contact-comment-section">
+    <h3><center>Linear Graphs</center></h3>
+    <div id="messageBanner">
+    
+    </div>
+    <form id="chart_form">
+      {% csrf_token %}
+        <fieldset>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <h3>Provide Your Data Here:</h3>
+                    <div class="form-group">
+                        <label>Enter A Linear Equation(e.g 3x + 2):</label><br>
+                        y = <input type="text" name="textInput" id="my_text" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter The Minimum Value Of X:</label>
+                        <input type="number" name="min" id="min" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Enter The Maximum Value Of X:</label>
+                        <input type="number" name="max" id="max" required>
+                    </div>
+                    
+                    <div class="form-group mb-0">
+                        <input class="btn-send" type="submit" id="chart_submit" value="Plot Graph">
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-sm-12">
+                    <h3>Solution Center:</h3>
+                    <div>
+                        <canvas id="myChart" width="400" height="400"></canvas>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+{% endblock chart_content %}
+{% block custom_js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js" integrity="sha512-TW5s0IT/IppJtu76UbysrBH9Hy/5X41OTAbQuffZFU6lQ1rdcLHzpU5BzVvr/YFykoiMYZVWlr/PX1mDcfM9Qg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock custom_js %}

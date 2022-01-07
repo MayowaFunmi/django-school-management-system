@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'auths',
     'mathematics',
+    'charts',
 ]
 
 MIDDLEWARE = [

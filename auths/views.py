@@ -106,7 +106,7 @@ def user_logout(request):
 
 @login_required
 def create_teacher_profile(request):
-    all_zones = Zone.objects.all()
+    all_zones = Zone.objects.order_by('name')
     all_schools = School.objects.order_by('zone')
     all_subjects = Subject.objects.order_by('name')
     context = {
@@ -243,16 +243,6 @@ def teacher_docs(request):
     return render(request, 'auths/teacher_docs.html', context)
 
 
-@login_required
-def create_student_profile(request):
-    pass
-
-
-@login_required
-def display_student_profile(request):
-    pass
-
-
 # pdf views
 @login_required
 def render_pdf_view(request):
@@ -332,9 +322,20 @@ def update_teacher_profile(request):
         previous_posting_3_id = request.POST['previous_posting_3']
         previous_subjects = request.POST['previous_subjects']
 
-        previous_posting_1 = School.objects.get(id=previous_posting_1_id)
-        previous_posting_2 = School.objects.get(id=previous_posting_2_id)
-        previous_posting_3 = School.objects.get(id=previous_posting_3_id)
+        if previous_posting_1_id == 'Not Available':
+            previous_posting_1 = None
+        else:
+            previous_posting_1 = School.objects.get(id=previous_posting_1_id)
+
+        if previous_posting_2_id == 'Not Available':
+            previous_posting_2 = None
+        else:
+            previous_posting_2 = School.objects.get(id=previous_posting_2_id)
+
+        if previous_posting_3_id == 'Not Available':
+            previous_posting_3 = None
+        else:
+            previous_posting_3 = School.objects.get(id=previous_posting_3_id)
 
         y = teacher.picture
         picture = None

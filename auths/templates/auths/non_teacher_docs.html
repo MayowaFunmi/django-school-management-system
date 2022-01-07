@@ -1,0 +1,29 @@
+{% extends 'auths/base.html' %} {% load static %} {% block title %}Document Files{% endblock title %} {% block content %}
+
+<div class="container contact-comment-section">
+
+    <div id="form-messages">
+        {% if messages %} {% for message in messages %}
+        <h3 style="text-align: center;">{{ message }}</h3>
+        {% endfor %} {% endif %}
+    </div>
+    <h3>
+    
+    </h3>
+    <div class="d-flex justify-content-center">
+        {% for file in n_teacher_files %}
+            <div class="col-md-6 col-sm-12">
+                {{ file.document_title }}
+            </div>
+    
+            <div class="col-md-6 col-sm-12">
+                <img src="{{ file.documents.url }}">
+            </div>
+        {% endfor %}
+    </div>
+    <button class="btn btn-primary my_btn">
+        <a style="color: white;" href="{% url 'auths:display_non_teacher_profile' %}" class="sl-readmore-btn mr-30" data-animation-in="lightSpeedIn" data-animation-out="animate-out">Back To Profile</a>
+    </button>
+
+</div>
+{% endblock content %}

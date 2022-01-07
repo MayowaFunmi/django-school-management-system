@@ -40,14 +40,11 @@
             Highest Qualification Attained: {{ qualification }}<br>
             Area Of Expertise: {{ discipline }}<br>
             Date Of Birth: {{ date_of_birth }}<br>
-            Published Work (Link): {{ published_work }}<br>
             Current Zone Posted: {{ current_posting_zone }}<br>
             Current School Assigned: {{ current_posting_school }}<br>
             Previous School Posted 1: {{ previous_posting_1 }}<br>
             Previous School Posted 2: {{ previous_posting_2 }}<br>
             Previous School Posted 3: {{ previous_posting_3 }}<br>
-            Current Subject You Teach: {{ current_subject }}<br>
-            Previous Subjects You've Taught: {{ previous_subjects }}<br>
         </div>
         
         <div class="col-md-4 col-sm-12">
@@ -56,7 +53,8 @@
     </div>
     <button class="btn btn-primary my_btn">
         <a style="color: white;" href="{% url 'auths:update_non_teacher_profile' %}" class="sl-readmore-btn mr-30" data-animation-in="lightSpeedIn" data-animation-out="animate-out">Edit Profile</a>
-        <a style="color: white;" href="{% url 'auths:render_pdf_view' %}" class="sl-readmore-btn mr-30" data-animation-in="lightSpeedIn" data-animation-out="animate-out" target="_blank">Print</a>
+                <a style="color: white;" href="{% url 'auths:non_teacher_docs' %}" class="sl-readmore-btn mr-30" data-animation-in="lightSpeedIn" data-animation-out="animate-out" target="_blank">View Uploaded Files</a>
+        <a style="color: white;" href="{% url 'auths:n_render_pdf_view' %}" class="sl-readmore-btn mr-30" data-animation-in="lightSpeedIn" data-animation-out="animate-out" target="_blank">Print</a>
     </button>
 
 </div>

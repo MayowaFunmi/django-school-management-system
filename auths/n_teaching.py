@@ -1,14 +1,17 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+
 from .models import NonTeachingStaff, NonTeachingSTaffFiles, Zone, School
 
 
 @login_required
 def create_non_teacher_profile(request):
-    all_zones = Zone.objects.all()
+    all_zones = Zone.objects.order_by('name')
     all_schools = School.objects.order_by('zone')
     context = {
         'all_zones': all_zones,
@@ -39,11 +42,23 @@ def create_non_teacher_profile(request):
         previous_posting_2_id = request.POST['previous_posting_2']
         previous_posting_3_id = request.POST['previous_posting_3']
 
+        if previous_posting_1_id == 'Not Available':
+            previous_posting_1 = None
+        else:
+            previous_posting_1 = School.objects.get(id=previous_posting_1_id)
+
+        if previous_posting_2_id == 'Not Available':
+            previous_posting_2 = None
+        else:
+            previous_posting_2 = School.objects.get(id=previous_posting_2_id)
+
+        if previous_posting_3_id == 'Not Available':
+            previous_posting_3 = None
+        else:
+            previous_posting_3 = School.objects.get(id=previous_posting_3_id)
+
         current_posting_zone = Zone.objects.get(id=current_posting_zone_id)
         current_posting_school = School.objects.get(id=current_posting_school_id)
-        previous_posting_1 = School.objects.get(id=previous_posting_1_id)
-        previous_posting_2 = School.objects.get(id=previous_posting_2_id)
-        previous_posting_3 = School.objects.get(id=previous_posting_3_id)
 
         n_teacher = NonTeachingStaff.objects.get(user=request.user)
         n_teacher.title = title
@@ -70,15 +85,18 @@ def create_non_teacher_profile(request):
         n_teacher.save()
 
         images = request.FILES.getlist('documents')
-        #document_title = request.POST.getlist('document_title')
-
+        document_title = request.POST.getlist('document_title[]')
+        print(document_title, type(document_title))
+        file_list = []
         for image in images:
             fs = FileSystemStorage()
             file_path = fs.save(image.name, image)
+            file_list.append(file_path)
 
-            teacher_files = NonTeachingSTaffFiles(user=n_teacher, documents=file_path)
-            teacher_files.save()
-
+        print(file_list, type(file_list))
+        for key, value in zip(document_title, file_list):
+            n_teacher_files = NonTeachingSTaffFiles(user=n_teacher, document_title=key, documents=value)
+            n_teacher_files.save()
         return redirect('/auths/display_non_teacher_profile/')
     return render(request, 'auths/create_non_teacher.html', context)
 
@@ -100,15 +118,12 @@ def display_non_teacher_profile(request):
             'unique_id': request.user.unique_id, 'middle_name': n_teacher.middle_name, 'title': n_teacher.title,
             'picture': n_teacher.picture, 'gender': n_teacher.gender, 'date_of_birth': n_teacher.date_of_birth,
             'age': n_teacher.age, 'address': n_teacher.address, 'religion': n_teacher.religion,
-            'phone_number': n_teacher.phone_number,
-            'about_me': n_teacher.about_me, 'created_date': n_teacher.created_date, 'designation': n_teacher.designation,
-            'grade_level': n_teacher.grade_level, 'first_appointment': n_teacher.first_appointment,
+            'phone_number': n_teacher.phone_number, 'about_me': n_teacher.about_me, 'created_date': n_teacher.created_date,
+            'designation': n_teacher.designation, 'grade_level': n_teacher.grade_level, 'first_appointment': n_teacher.first_appointment,
             'years_in_service': n_teacher.years_in_service, 'qualification': n_teacher.qualification,
-            'discipline': n_teacher.discipline,
-            'published_work': n_teacher.published_work, 'current_posting_zone': n_teacher.current_posting_zone,
+            'discipline': n_teacher.discipline, 'current_posting_zone': n_teacher.current_posting_zone,
             'current_posting_school': n_teacher.current_posting_school, 'previous_posting_1': n_teacher.previous_posting_1,
             'previous_posting_2': n_teacher.previous_posting_2, 'previous_posting_3': n_teacher.previous_posting_3,
-            'current_subject': n_teacher.current_subject, 'previous_subjects': n_teacher.previous_subjects,
         }
         return render(request, 'auths/display_non_teacher.html', context)
 
@@ -142,9 +157,20 @@ def update_non_teacher_profile(request):
         previous_posting_2_id = request.POST['previous_posting_2']
         previous_posting_3_id = request.POST['previous_posting_3']
 
-        previous_posting_1 = School.objects.get(id=previous_posting_1_id)
-        previous_posting_2 = School.objects.get(id=previous_posting_2_id)
-        previous_posting_3 = School.objects.get(id=previous_posting_3_id)
+        if previous_posting_1_id == 'Not Available':
+            previous_posting_1 = None
+        else:
+            previous_posting_1 = School.objects.get(id=previous_posting_1_id)
+
+        if previous_posting_2_id == 'Not Available':
+            previous_posting_2 = None
+        else:
+            previous_posting_2 = School.objects.get(id=previous_posting_2_id)
+
+        if previous_posting_3_id == 'Not Available':
+            previous_posting_3 = None
+        else:
+            previous_posting_3 = School.objects.get(id=previous_posting_3_id)
 
         y = teacher.picture
         picture = None
@@ -199,7 +225,7 @@ def update_non_teacher_profile(request):
 
         try:
             if request.POST['current_posting_zone'] and request.POST['current_posting_school']:
-                if request.POST['current_posting_zone'] == None and request.POST['current_posting_school'] == None:
+                if request.POST['current_posting_zone'] is None and request.POST['current_posting_school'] is None:
                     teacher.current_posting_zone = teacher.current_posting_zone
                     teacher.current_posting_school = teacher.current_posting_school
                 else:
@@ -216,3 +242,48 @@ def update_non_teacher_profile(request):
         teacher.save()
         return redirect('/auths/display_non_teacher_profile/')
     return render(request, 'auths/update_non_teacher.html', context)
+
+
+def non_teacher_docs(request):
+    n_teacher = NonTeachingStaff.objects.get(user=request.user)
+    n_teacher_files = NonTeachingSTaffFiles.objects.filter(user=n_teacher)
+    context = {
+        'n_teacher_files': n_teacher_files
+    }
+    return render(request, 'auths/non_teacher_docs.html', context)
+
+
+# pdf views
+@login_required
+def render_pdf_view(request):
+    n_teacher = NonTeachingStaff.objects.get(user=request.user)
+    template_path = 'auths/render_pdf_view.html'
+    context = {
+        'username': request.user.username, 'first_name': request.user.first_name,
+        'last_name': request.user.last_name,
+        'email': request.user.email, 'status': request.user.status, 'file_no': request.user.file_no,
+        'unique_id': request.user.unique_id, 'middle_name': n_teacher.middle_name, 'title': n_teacher.title,
+        'picture': n_teacher.picture, 'gender': n_teacher.gender, 'date_of_birth': n_teacher.date_of_birth,
+        'age': n_teacher.age, 'address': n_teacher.address, 'religion': n_teacher.religion,
+        'phone_number': n_teacher.phone_number, 'about_me': n_teacher.about_me, 'created_date': n_teacher.created_date,
+        'designation': n_teacher.designation, 'grade_level': n_teacher.grade_level,
+        'first_appointment': n_teacher.first_appointment,
+        'years_in_service': n_teacher.years_in_service, 'qualification': n_teacher.qualification,
+        'discipline': n_teacher.discipline, 'current_posting_zone': n_teacher.current_posting_zone,
+        'current_posting_school': n_teacher.current_posting_school, 'previous_posting_1': n_teacher.previous_posting_1,
+        'previous_posting_2': n_teacher.previous_posting_2, 'previous_posting_3': n_teacher.previous_posting_3,
+    }
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'filename="report.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+       html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response

@@ -1,0 +1,224 @@
+{% extends 'auths/base.html' %} {% load static %} {% block title %}Create Student Profile{% endblock title %} {% block content %}
+
+<div class="container contact-comment-section">
+    <h3>
+        <center>Create Student's Profile Form</center>
+    </h3>
+    <div id="form-messages">
+        {% if messages %} {% for message in messages %}
+        <h3 style="text-align: center;">{{ message }}</h3>
+        {% endfor %} {% endif %}
+    </div>
+    <form id="contact-form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Middle Name*</label>
+                        <input name="middle_name" id="middle_name" class="form-control" type="text" required>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Year Of Admission*</label>
+                        <input name="admission_year" id="admission_year" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Current School*</label><br>
+                        <select name="current_school" required>
+                            {% for school in all_schools %}
+							    <option value="{{ school.id }}">{{ school.name }}</option>
+                            {% endfor %}
+						</select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Department*</label><br>
+                        <select name="department" required>
+                            {% for department in all_departments %}
+							    <option value="{{ department.id }}">{{ department.department }}</option>
+                            {% endfor %}
+						</select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Student Class*</label><br>
+                        <select name="std_class" required>
+                            {% for class in all_classes %}
+							    <option value="{{ class.id }}">{{ class.name }}</option>
+                            {% endfor %}
+						</select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Student Level*</label><br>
+                        <select name="level" required>
+                            {% for level in all_levels %}
+							    <option value="{{ level.id }}">{{ level.level }}</option>
+                            {% endfor %}
+						</select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Previous School Attended 1*</label><br>
+                        <select name="prev_school_1">
+                            <option value="Not Available">Ignore If None</option>
+                            {% for school in all_schools %}
+							    <option value="{{ school.id }}">{{ school.name }} | {{ school.zone }}</option>
+                            {% endfor %}
+						</select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Previous School Attended 2*</label><br>
+                        <select name="prev_school_2">
+                            <option value="Not Available">Ignore If None</option>
+                            {% for school in all_schools %}
+							    <option value="{{ school.id }}">{{ school.name }} | {{ school.zone }}</option>
+                            {% endfor %}
+						</select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Previous School Attended 3*</label><br>
+                        <select name="prev_school_3">
+                            <option value="Not Available">Ignore If None</option>
+                            {% for school in all_schools %}
+							    <option value="{{ school.id }}">{{ school.name }} | {{ school.zone }}</option>
+                            {% endfor %}
+						</select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Add Your Photo*</label><br>
+                        <input type="file" name="picture" id="picture" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Gender*</label><br>
+                        <select name="gender" required>
+							<option value="Male">Male</option>
+							<option value="Female">Female</option>
+						</select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Date Of Birth*</label>
+                        <input type="date" name="date_of_birth" id="date_of_birth" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12" id="div_age">
+                    <div class="form-group">
+                        <label>Age*</label>
+                        <input name="age" id="age" class="form-control" type="text" readonly>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Address*</label>
+                        <input name="address" id="address" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Religion*</label><br>
+                        <select name="religion" required>
+							<option value="Christianity">Christianity</option>
+							<option value="Islam">Islam</option>
+						</select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Student's Phone Number*</label>
+                        <input name="student_phone_number" class="form-control" type="number" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Father's Full Name*</label>
+                        <input name="father_name" class="form-control" type="number" required>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Father's Phone Number*</label>
+                        <input name="father_phone" class="form-control" type="number" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Mother's Full Name*</label>
+                        <input name="mother_name" class="form-control" type="number" required>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Mother's Phone Number*</label>
+                        <input name="mother_phone" class="form-control" type="number" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Father's Photo*</label><br>
+                        <input type="file" name="father_img" required>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label>Mother's Photo*</label><br>
+                        <input type="file" name="mother_img" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group mb-0">
+                <input class="btn-send" type="submit" value="Submit Profile">
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+{% endblock content %}

@@ -21,10 +21,11 @@ from auths import views as auths_view
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('management_admin/', admin.site.urls),
     path('', auths_view.home, name='home'),
     path('auths/', include('auths.urls', namespace='auths')),
     path('mathematics/', include('mathematics.urls', namespace='mathematics')),
+    path('charts/', include('charts.urls', namespace='charts')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -270,6 +270,12 @@
                                                         <li> <a href="{% url 'mathematics:multiply_bases' %}">Number Base Multiplication</a> </li>
                                                     </ul>
                                                 </li>
+                                                
+                                                <li class="menu-item-has-children"> <a href="#">Graphs</a>
+                                                    <ul class="sub-menu">
+                                                        <li> <a href="{% url 'charts:linear_graph' %}">Linear Graph</a> </li>
+                                                    </ul>
+                                                </li>
 
                                                 <li><a href="{% url 'mathematics:calculator' %}">Calculator</a></li>
                                                 <li><a href="checkout.html">Checkout</a></li>
@@ -1367,8 +1373,9 @@
     <script src="{% static 'js/plugins.js' %}"></script>
     <!-- main js -->
     <script src="{% static 'js/main.js' %}"></script>
-    <script src="{% static 'js/custom.js' %}"></script>
     {% block custom_js %} {% endblock custom_js %}
+    <script src="{% static 'js/custom.js' %}"></script>
+
 </body>
 
 </html>

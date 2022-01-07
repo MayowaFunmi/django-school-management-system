@@ -92,7 +92,7 @@
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
                         <label>Current Photo:</label>
-                        <img src="{{ teacher.picture.url }}" style="width: 150px; height=150px;"><br>
+                        <img src="{{ teacher.picture.url }}" style="width: 150px; height: 150px;"><br>
                         <label>Change Photo Below If Necessary*</label><br>
                         <input type="file" name="picture" id="picture">
                     </div>
@@ -214,7 +214,10 @@
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
                         <label>Previous School Posted 1*</label><br>
+                        <label>School 1 Selected*</label><br>
+                        <input type="text" value="{{ teacher.previous_posting_1 }}" name="reg_previous_posting_1" readonly>
                         <select name="previous_posting_1">
+                            <option value="Not Available">Ignore If None</option>
                             {% for school in all_schools %}
 							    <option value="{{ school.id }}">{{ school.name }} | {{ school.zone }}</option>
                             {% endfor %}
@@ -224,7 +227,10 @@
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
                         <label>Previous School Posted 2*</label><br>
+                        <label>School 2 Selected*</label><br>
+                        <input type="text" value="{{ teacher.previous_posting_2 }}" name="reg_previous_posting_2" readonly>
                         <select name="previous_posting_2">
+                            <option value="Not Available">Ignore If None</option>
                             {% for school in all_schools %}
 							    <option value="{{ school.id }}">{{ school.name }} | {{ school.zone }}</option>
                             {% endfor %}
@@ -237,7 +243,10 @@
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
                         <label>Previous School Posted 3*</label><br>
+                        <label>School 3 Selected*</label><br>
+                        <input type="text" value="{{ teacher.previous_posting_3 }}" name="reg_previous_posting_3" readonly>
                         <select name="previous_posting_3">
+                            <option value="Not Available">Ignore If None</option>
                             {% for school in all_schools %}
 							    <option value="{{ school.id }}">{{ school.name }} | {{ school.zone }}</option>
                             {% endfor %}
