@@ -1,10 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'auths/base.html' %} {% load static %} {% block title %}Profile Details{% endblock title %} {% block content %}
 
-</body>
-</html>
+<div class="container contact-comment-section">
+
+    <div id="form-messages">
+        {% if messages %} {% for message in messages %}
+        <h3 style="text-align: center;">{{ message }}</h3>
+        {% endfor %} {% endif %}
+    </div>
+    <h3>
+      {{ first_name }} {{ last_name }}, Your Profile Details:
+    </h3>
+    <div class="d-flex justify-content-center">
+        <div class="col-md-4 col-sm-12">
+            <div>
+                Status : {{ status }}<br>T
+                Username: {{ username }}<br>
+                Admission Number: {{ admission_number }}<br>
+                First Name: {{ first_name }}<br>
+                Surname: {{ last_name }}<br>
+                Email: {{ email }}<br>
+                Middle Name: {{ middle_name }}<br>
+                Gender: {{ gender }}<br>
+                Date Of Birth: {{ date_of_birth }}<br>
+                Age: {{ age }}<br>
+                Address: {{ address }}<br>
+                Religion: {{ religion }}<br>
+                Student's Phone Number: {{ student_phone_number }}<br>
+                Date Registered: {{ created_date }}<br>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-12">
+            Unique ID : {{ unique_id }}<br>
+            Year Of Admission: {{ admission_year }}<br>
+            Current School: {{ current_school }}<br>
+            Department: {{ department }}<br>
+            Class: {{ std_class }}<br>
+            Level: {{ level }}<br>
+            Previous School Attended 1: {{ prev_school_1 }}<br>
+            Previous School Attended 2: {{ prev_school_2 }}<br>
+            Previous School Attended 3: {{ prev_school_3 }}<br>
+            Father's Full Name: {{ father_name }}<br>
+            Father's Phone Number: {{ father_phone }}<br>
+            Mother's Full Name: {{ mother_name }}<br>
+            Mother's Phone Number: {{ mother_phone }}<br>
+        </div>
+        
+        <div class="col-md-4 col-sm-12">
+            Student's Photo: <img src="{{ picture.url }}"><br>
+            Father's Photo: <img src="{{ father_img.url }}"><br>
+            Mother's Photo: <img src="{{ mother_img.url }}"><br>
+
+        </div>
+    </div>
+    <button class="btn btn-primary my_btn">
+        <a style="color: white;" href="{% url 'auths:update_student_profile' %}" class="sl-readmore-btn mr-30" data-animation-in="lightSpeedIn" data-animation-out="animate-out">Edit Profile</a>
+        <a style="color: white;" href="#" class="sl-readmore-btn mr-30" data-animation-in="lightSpeedIn" data-animation-out="animate-out" target="_blank">View Uploaded Files</a>
+        <a style="color: white;" href="#" class="sl-readmore-btn mr-30" data-animation-in="lightSpeedIn" data-animation-out="animate-out" target="_blank">Print</a>
+    </button>
+
+</div>
+{% endblock content %}

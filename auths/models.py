@@ -313,11 +313,11 @@ class Student(models.Model):
     address = models.CharField(max_length=300, null=True)
     religion = models.CharField(choices=RELIGION, max_length=20, null=True)
     student_phone_number = models.CharField(max_length=20, null=True)
-    father_name = models.CharField(choices=GENDER, max_length=10, null=True, verbose_name="Father's Full Name")
-    father_phone = models.CharField(choices=GENDER, max_length=10, null=True, verbose_name="Father's Phone Number")
+    father_name = models.CharField(max_length=10, null=True, verbose_name="Father's Full Name")
+    father_phone = models.CharField(max_length=10, null=True, verbose_name="Father's Phone Number")
     father_img = models.ImageField(upload_to='Parents_Fathers/%Y/%m/%d/', null=True)
-    mother_name = models.CharField(choices=GENDER, max_length=10, null=True, verbose_name="Mother's Full Name")
-    mother_number = models.CharField(choices=GENDER, max_length=10, null=True, verbose_name="Mother's Phone Number")
+    mother_name = models.CharField(max_length=10, null=True, verbose_name="Mother's Full Name")
+    mother_phone = models.CharField(max_length=10, null=True, verbose_name="Mother's Phone Number")
     mother_img = models.ImageField(upload_to='Parents_Mothers/%Y/%m/%d/', null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -337,7 +337,7 @@ class StudentFiles(models.Model):
     documents = models.FileField(upload_to='Student_files/%Y/%m/%d/')
 
     def __str__(self):
-        return f'Files for {self.user.title} {self.user.user.last_name}'
+        return f'Files for {self.user.user.first_name} {self.user.user.last_name}'
 
 
 def post_save_receiver(sender, instance, created, **kwargs):

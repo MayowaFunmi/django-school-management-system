@@ -83,7 +83,6 @@ def user_login(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    print(request.user.status)
                     if request.user.is_superuser:
                         return redirect('/auths/display_teacher_profile/')
                     elif request.user.status == 'administrator':
@@ -94,6 +93,10 @@ def user_login(request):
                         return redirect('/auths/display_non_teacher_profile/')
                     elif request.user.status == 'student':
                         return redirect('/auths/display_student_profile/')
+            else:
+                messages.error(request, 'Username or password incorrect!!!')
+                return render(request, 'auths/login.html')
+
     return render(request, 'auths/login.html')
 
 
